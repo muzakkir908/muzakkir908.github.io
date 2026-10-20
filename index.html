@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muzakkir Pathan</title>
+<meta name="description" content="Muzakkir Pathan, Cloud, Data and DevOps Engineer in Dublin. Production PySpark pipelines on AWS, Kubernetes, Terraform.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f4f1ea;
+  --paper-2: #ebe6db;
+  --ink: #1d1c1a;
+  --ink-2: #57534b;
+  --ink-3: #8a857a;
+  --rule: #d6d0c3;
+  --signal: #c2410c;
+  --ok: #3f6212;
+  --code-bg: #1d1c1a;
+  --code-ink: #e9e4d8;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #161513; --paper-2: #201e1b; --ink: #ece7dc; --ink-2: #b3ad9f; --ink-3: #7d786d;
+    --rule: #34312c; --signal: #f97316; --ok: #a3c46a; --code-bg: #0e0d0c; --code-ink: #e9e4d8;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #161513; --paper-2: #201e1b; --ink: #ece7dc; --ink-2: #b3ad9f; --ink-3: #7d786d;
+  --rule: #34312c; --signal: #f97316; --ok: #a3c46a; --code-bg: #0e0d0c; --code-ink: #e9e4d8;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 17px/1.6 var(--sans);
+}
+a { color: inherit; text-decoration-color: var(--signal); text-underline-offset: 3px; }
+a:hover { color: var(--signal); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+@media (max-width: 600px) { .wrap { padding: 0 16px; } body { font-size: 16px; } }
+
+/* top bar */
+.bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 0; border-bottom: 1px solid var(--rule);
+  font: 500 13px/1 var(--mono); letter-spacing: .02em;
+}
+.bar nav { display: flex; gap: 22px; }
+.bar nav a { text-decoration: none; color: var(--ink-2); }
+.bar nav a:hover { color: var(--signal); }
+.theme-btn {
+  background: none; border: 1px solid var(--rule); color: var(--ink-2);
+  font: inherit; padding: 6px 9px; border-radius: 3px; cursor: pointer; margin-left: 6px;
+}
+@media (max-width: 600px) { .bar nav a.hide-sm { display: none; } .bar nav { gap: 14px; } }
+
+/* intro */
+.intro { padding: 88px 0 72px; display: grid; grid-template-columns: 1fr 260px; gap: 56px; align-items: end; }
+.intro h1 {
+  font: 400 clamp(38px, 6vw, 64px)/1.04 var(--serif); letter-spacing: -.02em; margin: 0 0 28px;
+}
+.intro h1 em { color: var(--signal); font-style: italic; }
+.intro p.lede { font: 400 20px/1.55 var(--serif); color: var(--ink-2); max-width: 36em; margin: 0; }
+.status { font: 400 13px/1.7 var(--mono); color: var(--ink-2); border-left: 2px solid var(--signal); padding: 2px 0 2px 16px; }
+.status b { color: var(--ink); font-weight: 500; }
+.status .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); margin-right: 6px; vertical-align: 1px; }
+@media (max-width: 760px) { .intro { grid-template-columns: 1fr; gap: 36px; padding: 56px 0 48px; } }
+
+/* sections */
+section { padding: 64px 0; border-top: 1px solid var(--rule); }
+.label {
+  font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink-3); margin: 0 0 28px; display: flex; gap: 12px;
+}
+.label span { color: var(--signal); }
+h2 { font: 400 clamp(28px, 4vw, 40px)/1.15 var(--serif); letter-spacing: -.015em; margin: 0 0 18px; }
+h3 { font: 500 22px/1.3 var(--serif); margin: 0 0 8px; }
+
+/* case study */
+.case-head { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start; }
+.case-head p { color: var(--ink-2); max-width: 40em; margin: 0; }
+.repo-link { font: 500 13px/1 var(--mono); white-space: nowrap; padding-top: 8px; }
+@media (max-width: 600px) { .case-head { grid-template-columns: 1fr; } }
+
+.flow {
+  margin: 40px 0; display: grid; grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--rule); background: var(--paper-2);
+}
+.flow div { padding: 18px 16px; border-right: 1px solid var(--rule); position: relative; }
+.flow div:last-child { border-right: 0; }
+.flow small { display: block; font: 500 11px/1 var(--mono); color: var(--signal); margin-bottom: 8px; letter-spacing: .06em; }
+.flow b { display: block; font: 500 15px/1.3 var(--sans); }
+.flow i { display: block; font: 400 12.5px/1.45 var(--mono); color: var(--ink-2); font-style: normal; margin-top: 6px; }
+@media (max-width: 760px) {
+  .flow { grid-template-columns: 1fr 1fr; }
+  .flow div { border-bottom: 1px solid var(--rule); }
+  .flow div:nth-child(2n) { border-right: 0; }
+  .flow div:last-child { grid-column: 1 / -1; border-bottom: 0; }
+}
+
+.decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; margin: 0; padding: 0; list-style: none; }
+.decisions li { padding: 14px 0; border-bottom: 1px dashed var(--rule); font-size: 15.5px; color: var(--ink-2); }
+.decisions li b { color: var(--ink); font-weight: 600; }
+@media (max-width: 700px) { .decisions { grid-template-columns: 1fr; } }
+
+.incident {
+  margin-top: 44px; display: grid; grid-template-columns: 220px 1fr; gap: 0;
+  border: 1px solid var(--rule);
+}
+.incident aside { padding: 22px; border-right: 1px solid var(--rule); font: 400 13px/1.7 var(--mono); color: var(--ink-2); }
+.incident aside .tag { display: inline-block; background: var(--signal); color: #fff; padding: 2px 7px; border-radius: 2px; font-size: 11px; letter-spacing: .06em; margin-bottom: 14px; }
+.incident .body { padding: 22px 26px; }
+.incident .body p { margin: 0 0 14px; }
+.incident blockquote { margin: 18px 0 0; font: italic 400 19px/1.5 var(--serif); color: var(--ink); border-left: 2px solid var(--signal); padding-left: 16px; }
+pre {
+  background: var(--code-bg); color: var(--code-ink); font: 400 13px/1.65 var(--mono);
+  padding: 16px 18px; margin: 14px 0; overflow-x: auto; border-radius: 3px;
+}
+pre .c { color: #8a857a; }
+pre .bad { color: #fb923c; }
+code { font: 400 .88em var(--mono); background: var(--paper-2); padding: 1px 5px; border-radius: 2px; }
+pre code { background: none; padding: 0; font-size: inherit; }
+@media (max-width: 700px) {
+  .incident { grid-template-columns: 1fr; }
+  .incident aside { border-right: 0; border-bottom: 1px solid var(--rule); }
+}
+
+/* work list */
+.work { list-style: none; margin: 0; padding: 0; }
+.work li {
+  display: grid; grid-template-columns: 64px 1fr 200px; gap: 24px;
+  padding: 30px 0; border-bottom: 1px solid var(--rule);
+}
+.work li:first-child { padding-top: 6px; }
+.work .n { font: 500 13px/1.9 var(--mono); color: var(--ink-3); }
+.work p { margin: 0 0 12px; color: var(--ink-2); font-size: 15.5px; }
+.work .meta { font: 400 12.5px/1.8 var(--mono); color: var(--ink-2); }
+.work .meta a { display: inline-block; margin-top: 8px; font-weight: 500; color: var(--ink); }
+.work .meta .priv { display: inline-block; margin-top: 8px; color: var(--ink-3); }
+.figs { display: flex; flex-wrap: wrap; gap: 26px; margin: 14px 0 4px; }
+.figs div { font: 400 12px/1.3 var(--mono); color: var(--ink-3); }
+.figs b { display: block; font: 400 30px/1.1 var(--serif); color: var(--ink); margin-bottom: 2px; }
+@media (max-width: 760px) {
+  .work li { grid-template-columns: 1fr; gap: 6px; }
+  .work .n { line-height: 1; }
+}
+
+/* toolbox */
+.tools { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.tools h4 { font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--signal); margin: 0 0 14px; }
+.tools ul { list-style: none; margin: 0; padding: 0; font-size: 15px; }
+.tools li { padding: 5px 0; border-bottom: 1px solid var(--rule); }
+@media (max-width: 760px) { .tools { grid-template-columns: 1fr 1fr; } }
+
+/* contact */
+.contact h2 { max-width: 18em; }
+.contact .links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
+.contact .links a {
+  font: 500 14px/1 var(--mono); text-decoration: none; padding: 13px 18px;
+  border: 1px solid var(--ink); border-radius: 3px;
+}
+.contact .links a.primary { background: var(--ink); color: var(--paper); }
+.contact .links a:hover { border-color: var(--signal); color: var(--signal); }
+.contact .links a.primary:hover { background: var(--signal); color: #fff; }
+
+footer { padding: 28px 0 40px; border-top: 1px solid var(--rule); font: 400 12.5px/1.6 var(--mono); color: var(--ink-3); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="bar">
+    <a href="#" style="text-decoration:none">muzakkir.pathan</a>
+    <nav>
+      <a href="#pipeline" class="hide-sm">Case study</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-btn" id="theme" aria-label="Toggle colour theme">◐</button>
+    </nav>
+  </header>
+
+  <div class="intro">
+    <div>
+      <h1>I build data pipelines,<br>then I <em>break them</em><br>on purpose.</h1>
+      <p class="lede">I'm Muzakkir, a Cloud, Data and DevOps Engineer in Dublin. I spent 3 years at TCS building PySpark pipelines that ran in production on AWS. I cut data latency from over 20 hours to under 2, and found that 97% of the raw data was duplicates. Now I work with Kubernetes, Terraform and LLM systems, and I learn the most when I deliberately break things.</p>
+    </div>
+    <div class="status">
+      <div><span class="dot"></span><b>Open to roles</b></div>
+      <div>Data engineering</div>
+      <div>Cloud / DevOps</div>
+      <div>Platform / SRE</div>
+      <div style="margin-top:10px"><b>Dublin</b> · Stamp 1G</div>
+      <div>No sponsorship needed</div>
+      <div style="margin-top:10px">MSc Cloud Computing · <b>NCI</b></div>
+      <div>3 yrs <b>TCS</b> · NSS DigitalTwinx</div>
+    </div>
+  </div>
+
+  <section id="pipeline">
+    <p class="label"><span>01</span> Case study</p>
+    <div class="case-head">
+      <div>
+        <h2>Rebuilding a production pipeline to break it properly</h2>
+        <p>At TCS I worked on NSS DigitalTwinx, which loads millions of parcel records a day from terminals in Sweden. I didn't own the infrastructure or the failure handling there, so I rebuilt a smaller version in my own AWS account and ran 8 deliberate failure experiments on it. For each one I wrote down the symptom, how I diagnosed it, the fix, and how I'd prevent it in production.</p>
+      </div>
+      <a class="repo-link" href="https://github.com/muzakkir908/nss-replica-pipeline">view repo ↗</a>
+    </div>
+
+    <div class="flow">
+      <div><small>EXTRACT</small><b>S3 raw</b><i>date-partitioned CSVs + carryover</i></div>
+      <div><small>GUARD</small><b>Hash ledger</b><i>skip files already ingested, by content</i></div>
+      <div><small>TRANSFORM</small><b>PySpark · EC2</b><i>dedup → validate → quarantine → enrich</i></div>
+      <div><small>LOAD</small><b>S3 + RDS</b><i>Parquet, MySQL delete+insert by batch_id</i></div>
+      <div><small>OBSERVE</small><b>CloudWatch</b><i>8 metrics · 6 alarms · SNS email</i></div>
+    </div>
+
+    <ul class="decisions">
+      <li><b>Allow-list validation.</b> Keep the rows you expect. Don't just filter out the ones you don't.</li>
+      <li><b>Idempotent loads.</b> Delete-then-insert by batch makes any re-run safe.</li>
+      <li><b>Quarantine, not reject.</b> Rows with an unknown terminal are kept aside instead of deleted.</li>
+      <li><b>Three layers of dedup.</b> Spark, a MySQL <code>UNIQUE KEY</code>, and the file ledger. A bug has to get past all three to cause damage.</li>
+      <li><b>Batch cap with carryover.</b> Volume spikes get queued for the next run, not crammed into this one.</li>
+      <li><b>Dirty data by design.</b> The data generator injects 10 kinds of mess: stuck scanners, bad encodings, impossible weights.</li>
+    </ul>
+
+    <div class="incident">
+      <aside>
+        <span class="tag">FAILURE 01</span><br>
+        silent data loss<br>
+        exit code: <b style="color:var(--ok)">0</b><br>
+        logs: clean<br>
+        rows lost: ~0.5% / run
+      </aside>
+      <div class="body">
+        <p>I swapped one allow-list filter for a block-list. The pipeline still finished, logged <code>COMPLETED</code>, and showed no errors, but every run quietly dropped some rows.</p>
+<pre><code><span class="c"># looks harmless</span>
+col("action_type") != "ERROR"
+
+<span class="c"># but in Spark / SQL</span>
+NULL != "ERROR"  <span class="bad">→ NULL → row dropped, never counted</span></code></pre>
+        <p>I found it with a reconciliation check: <code>raw = loaded + rejected + quarantined</code>. The counts didn't add up. The fix was to go back to an allow-list with <code>isin()</code> and backfill the affected dates.</p>
+        <blockquote>The bugs that worry me most are the ones that don't crash.</blockquote>
+      </div>
+    </div>
+    <p style="font:400 13px/1.6 var(--mono);color:var(--ink-3);margin-top:16px">7 more experiments in the <a href="https://github.com/muzakkir908/nss-replica-pipeline/blob/main/failure_log.md">failure log ↗</a>: connection exhaustion, duplicate files, volume spikes and others.</p>
+  </section>
+
+  <section id="work">
+    <p class="label"><span>02</span> Experience</p>
+    <ul class="work" style="margin-bottom:56px">
+      <li>
+        <div class="n">2021–24</div>
+        <div>
+          <h3>Data-Python Developer, Tata Consultancy Services</h3>
+          <p>I built Python and PySpark ETL on AWS (EC2, S3, RDS) for the NSS DigitalTwinx logistics platform, plus dimensional models and KPI dashboards: parcels per hour, processing time, stuck parcels and on-time rate. The pipelines ran every 2 hours, 24/7, with CloudWatch alerting. I helped move the Spark workloads to EKS and mentored 2 junior colleagues.</p>
+          <div class="figs">
+            <div><b>20h → &lt;2h</b>data latency</div>
+            <div><b>97%</b>duplicates removed</div>
+            <div><b>millions</b>records / day</div>
+          </div>
+        </div>
+        <div class="meta">PySpark · SQL · AWS<br>CloudWatch · EKS<br>Jira · Bitbucket</div>
+      </li>
+      <li>
+        <div class="n">2025–</div>
+        <div>
+          <h3>Logistics Data Coordinator, Greyhound Recycling</h3>
+          <p>I keep weighbridge and logistics records at 99% accuracy by fixing errors at the source. I also wrote <code>fuel.py</code>, a Python OCR tool that reads fuel receipt images and turns them into structured cost data, so nobody has to type them in.</p>
+        </div>
+        <div class="meta">Python · OCR<br>Dublin</div>
+      </li>
+    </ul>
+
+    <p class="label"><span>03</span> Other work</p>
+    <ul class="work">
+      <li>
+        <div class="n">03.1</div>
+        <div>
+          <h3>Kubernetes e-commerce platform on EKS</h3>
+          <p>A 13-microservice platform deployed to AWS EKS with Helm charts and ArgoCD (GitOps). I tested it on Minikube and KIND first, and set up RBAC for least privilege.</p>
+        </div>
+        <div class="meta">Kubernetes · EKS · Helm<br>ArgoCD · Docker · RBAC</div>
+      </li>
+      <li>
+        <div class="n">03.2</div>
+        <div>
+          <h3>Multi-VPC AWS infrastructure with monitoring</h3>
+          <p>Two VPCs built with Terraform, with MySQL in a private subnet, a NAT Gateway and least-privilege rules. When monitoring went down, I fixed it by opening only port 9100 instead of loosening the whole security group.</p>
+        </div>
+        <div class="meta">Terraform · VPC · EC2<br>Prometheus · Grafana</div>
+      </li>
+      <li>
+        <div class="n">03.3</div>
+        <div>
+          <h3>DevSecOps CI/CD pipeline</h3>
+          <p>A Jenkins pipeline with SonarQube quality gates.</p>
+          <div class="figs">
+            <div><b>−30%</b>code duplication</div>
+            <div><b>−40%</b>technical debt</div>
+            <div><b>65→85</b>maintainability</div>
+          </div>
+        </div>
+        <div class="meta">Jenkins · SonarQube<br>Docker · Git</div>
+      </li>
+      <li>
+        <div class="n">03.4</div>
+        <div>
+          <h3>Player-aware resource allocation for cloud gaming</h3>
+          <p>My MSc research. An LSTM predicts when a player is about to enter combat, and a Q-learning agent moves their network slice up or down ahead of time. It's deployed across an edge, fog and cloud tier, so you only pay for premium bandwidth when it matters.</p>
+          <div class="figs">
+            <div><b>~95%</b>offline accuracy</div>
+            <div><b>~10%</b>less premium slice use</div>
+          </div>
+        </div>
+        <div class="meta">Python · PyTorch<br>LSTM · Q-learning<br><a href="https://github.com/muzakkir908/MSc_RIC">repo ↗</a></div>
+      </li>
+      <li>
+        <div class="n">03.5</div>
+        <div>
+          <h3>NovaHer: health-tracking API with AI insights</h3>
+          <p>A Flask REST backend for a women's health app. It has JWT auth with refresh tokens and a token blacklist, plus Stripe subscriptions handled through webhooks. Insights come from a chain of AI providers (OpenAI, then Gemini, then Claude on Bedrock), with a rule-based engine as the last fallback, so the feature keeps working when every API key fails. Health logs are summarised without personal data before being sent to any model, and users can export their data for GDPR.</p>
+        </div>
+        <div class="meta">Flask · SQLAlchemy<br>PostgreSQL · Stripe · Bedrock<br><span class="priv">private repo</span></div>
+      </li>
+      <li>
+        <div class="n">03.6</div>
+        <div>
+          <h3>HotelHub</h3>
+          <p>A Django booking app built on 7+ AWS services, including a Node.js sentiment microservice on Lambda behind API Gateway. I also published a Python library, <a href="https://pypi.org/project/aws-hotel-helpers/">aws-hotel-helpers</a>, on PyPI.</p>
+        </div>
+        <div class="meta">Django · Lambda<br>API Gateway · RDS · Serverless<br><a href="https://github.com/muzakkir908/Hotel_HUB">repo ↗</a></div>
+      </li>
+      <li>
+        <div class="n">03.7</div>
+        <div>
+          <h3>Flavour Finder</h3>
+          <p>A Django recipe app with accounts, profiles and favourites. Calls to the external API are cached so the app doesn't hit it on every page load. Containerised for deployment.</p>
+        </div>
+        <div class="meta">Django · Docker<br>caching · REST APIs<br><a href="https://github.com/muzakkir908/Flavour-Finder">repo ↗</a></div>
+      </li>
+      <li>
+        <div class="n">03.8</div>
+        <div>
+          <h3>Can you predict a viral gaming post?</h3>
+          <p>A collector that pulls posts from gaming subreddits every 4 hours and tracks how engagement changes over time. The snapshots land in S3, ready for feature engineering and a model.</p>
+        </div>
+        <div class="meta">Python · Reddit API<br>scheduling · S3<br><span class="priv">in progress</span></div>
+      </li>
+      <li>
+        <div class="n">03.9</div>
+        <div>
+          <h3>Executive sales dashboard</h3>
+          <p>It found a $17K loss in tables and bookcases, showed that Texas sold $170K but lost $26K, and showed that any discount above 20% wiped out the profit.</p>
+        </div>
+        <div class="meta">Tableau · SQL</div>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="label"><span>04</span> Toolbox</p>
+    <div class="tools">
+      <div><h4>Data</h4><ul><li>PySpark · SQL</li><li>Databricks · Snowflake</li><li>dbt · Airflow · Kafka</li><li>Star schema · data quality</li></ul></div>
+      <div><h4>Cloud</h4><ul><li>AWS: EC2, S3, RDS, EKS</li><li>Lambda · DynamoDB · Bedrock</li><li>Azure · GCP · BigQuery</li><li>CloudWatch</li></ul></div>
+      <div><h4>DevOps</h4><ul><li>Kubernetes · Helm · ArgoCD</li><li>Terraform · Ansible</li><li>Jenkins · GitHub Actions</li><li>Prometheus · Grafana</li></ul></div>
+      <div><h4>AI &amp; backend</h4><ul><li>RAG · LangGraph · MCP</li><li>PyTorch · LSTM · RL</li><li>Flask · Django</li><li>Power BI · Tableau</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label"><span>05</span> Certifications &amp; education</p>
+    <div class="tools" style="grid-template-columns:1fr 1fr">
+      <div><h4>Certifications</h4><ul>
+        <li>Google Cloud Associate Cloud Engineer</li>
+        <li>AWS Solutions Architect Associate <span style="color:var(--ink-3)">(in progress)</span></li>
+        <li>CKA <span style="color:var(--ink-3)">(course completed)</span></li>
+        <li>Microsoft DP-100 <span style="color:var(--ink-3)">(course + labs)</span></li>
+        <li>DevOps Culture Programme</li>
+        <li>Anthropic Academy: Subagents, Agent Skills</li>
+      </ul></div>
+      <div><h4>Education</h4><ul>
+        <li><b>MSc Cloud Computing</b>, National College of Ireland, 2025</li>
+        <li>MCA, Jain University, 2024</li>
+        <li>BCA, Vikrama Simhapuri University, 2021</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <p class="label"><span>06</span> Contact</p>
+    <h2>Hiring for data, cloud or DevOps in Ireland? I'd like to hear from you.</h2>
+    <div class="links">
+      <a class="primary" href="https://www.linkedin.com/in/muzakkir-pathan/">LinkedIn ↗</a>
+      <a href="https://github.com/muzakkir908">GitHub ↗</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>Muzakkir Pathan</span>
+    <span>Hand-built HTML &amp; CSS, no framework</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement, btn = document.getElementById('theme');
+  try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  btn.addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
