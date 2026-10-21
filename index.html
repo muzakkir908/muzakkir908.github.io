@@ -41,11 +41,11 @@ a { color: inherit; }
 .name { position: absolute; z-index: 2; left: 5vw; top: 14vh; margin: 0; font: 400 clamp(84px, 15.5vw, 300px)/.84 var(--display); letter-spacing: -.01em; text-transform: uppercase;
   background: linear-gradient(90deg, #0b0707 0%, rgba(11,7,7,.95) 42%, rgba(11,7,7,.55) 66%, rgba(11,7,7,.18) 88%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .name span { display: block; }
-.face-wrap { position: absolute; z-index: 3; right: 0; bottom: 0; width: min(74vw, 113vh); aspect-ratio: 1104 / 980; }
+.face-wrap { position: absolute; z-index: 3; right: 3vw; bottom: 0; height: 96vh; max-width: 62vw; aspect-ratio: 720 / 900; }
 #face { width: 100%; height: 100%; display: block; }
 .face-wrap img { width: 100%; height: 100%; object-fit: contain; object-position: bottom; display: none; }
 .no-gl .face-wrap img { display: block; } .no-gl #face { display: none; }
-.hint { position: absolute; z-index: 6; right: 36%; top: 40%; font: 500 11.5px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink);
+.hint { position: absolute; z-index: 6; right: 41%; top: 56%; font: 500 11.5px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink);
   display: flex; align-items: center; gap: 10px; transition: opacity .5s; }
 .hint i { width: 34px; height: 1.5px; background: var(--ink); display: block; }
 .hint { background: var(--cream); padding: 8px 12px; border-radius: 999px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
@@ -67,12 +67,13 @@ a { color: inherit; }
 .cta span { width: 54px; height: 54px; border-radius: 10px; background: var(--ink); color: var(--or2); display: grid; place-items: center; font: 600 24px/1 var(--sans); }
 .cta:hover { transform: translateY(-3px); }
 @media (max-width: 900px) {
-  .face-wrap { width: 175vw; right: -48vw; }
+  .face-wrap { height: auto; max-width: none; width: 118vw; right: -14vw; }
   #face { touch-action: pan-y; }
   .name { top: 13vh; font-size: clamp(64px, 19vw, 150px); }
   .services { display: none; }
   .hint { right: 8vw; top: 26%; }
-  .lede { bottom: 19vh; right: 30vw; font-size: 15px; background: rgba(255,124,52,.88); padding: 8px 11px; border-radius: 10px; }
+  .lede { top: calc(13vh + 2 * clamp(64px, 19vw, 150px) * .84 + 18px); bottom: auto; right: 5vw; font-size: 15px; }
+  .hint { top: auto; bottom: 24%; right: auto; left: 5vw; max-width: 62vw; font-size: 10px; padding: 7px 10px; }
   .top .time { display: none; }
   .cta { font-size: 22px; padding: 10px 10px 10px 18px; } .cta span { width: 42px; height: 42px; }
 }
@@ -237,10 +238,10 @@ footer { padding: 30px 5vw 40px; display: flex; justify-content: space-between; 
   </div>
   <h1 class="name"><span>Muzakkir</span><span>Pathan</span></h1>
   <div class="face-wrap" id="faceWrap">
-    <canvas id="face" role="img" aria-label="Muzakkir Pathan in sunglasses and a navy blazer outside the Convention Centre Dublin. Hovering shows an X-ray of his skeleton."></canvas>
-    <img src="img/person.png" alt="Muzakkir Pathan in sunglasses and a navy blazer">
+    <canvas id="face" role="img" aria-label="Muzakkir Pathan in sunglasses and a navy blazer by the river at Grand Canal Dock, Dublin. Hovering reveals his tech stack inside him."></canvas>
+    <img src="img/me.webp" alt="Muzakkir Pathan in sunglasses and a navy blazer at Grand Canal Dock">
   </div>
-  <div class="hint" id="hint"><i></i>Hover me for an X-ray</div>
+  <div class="hint" id="hint"><i></i>Hover me to see what I'm made of</div>
   <p class="lede">Data, cloud &amp; DevOps engineer. I build <em>pipelines</em> and platforms that don't break quietly.</p>
   <div class="services">
     <h4>Services</h4>
@@ -426,44 +427,44 @@ col("action_type").isin(["collection", "distribution"])</code></pre>
     });
   }
 
-  /* ---------- portrait: the Convention Centre in the background, X-ray skeleton under the cursor ---------- */
-  var cv = document.getElementById('face'), wrapEl = document.getElementById('faceWrap'), hint = document.getElementById('hint');
+  /* ---------- portrait: Grand Canal Dock melts into the page; hover reveals the tech stack inside the body ---------- */
+  var cv = document.getElementById('face'), hint = document.getElementById('hint');
   var gl = cv.getContext('webgl', { premultipliedAlpha: true, alpha: true, antialias: false });
   var TRAIL = 14, trail = [], faceDraw = null;
   for (var i = 0; i < TRAIL; i++) trail.push({ x: -999, y: -999 });
-  if (!fine) hint.lastChild.textContent = 'Drag over me for an X-ray';
+  if (!fine) hint.lastChild.textContent = 'Drag over me to see what I\'m made of';
   if (!gl) document.documentElement.classList.add('no-gl');
   else {
     var vs = 'attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
     var fs = [
       'precision highp float;',
-      'varying vec2 v; uniform sampler2D bgT, perT, fxT; uniform vec2 res; uniform float t, hover; uniform vec3 trail[' + TRAIL + ']; uniform vec3 glitch;',
-      'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+      'varying vec2 v; uniform sampler2D meT, toolT, bgT; uniform vec2 res, texel; uniform float t, hover; uniform vec3 trail[' + TRAIL + ']; uniform vec3 glitch;',
+      // average alpha on a ring around uv: used for the rim light and the contact shadow
+      'float ring(vec2 uv, float r){float s=0.;for(int i=0;i<8;i++){float an=float(i)*.785398;s+=texture2D(meT,uv+vec2(cos(an),sin(an))*texel*r).a;}return s/8.;}',
       'void main(){',
-      ' vec2 uv=v;',
-      // the building: an orange duotone that melts into the page on the left
+      ' vec2 uv=v; vec4 src=texture2D(meT,uv); float a=src.a;',
+      // the river and the docks: an orange duotone that fades into the page at every edge
       ' vec3 bg=texture2D(bgT,uv).rgb; float Lb=dot(bg,vec3(.299,.587,.114));',
-      ' vec3 duo=mix(vec3(.16,.05,.02),vec3(1.,.5,.2),smoothstep(.04,.9,Lb)); duo=mix(duo,vec3(1.,.9,.8),smoothstep(.82,1.,Lb)*.55);',
-      ' float aBg=smoothstep(0.,.42,uv.x)*(.88-.25*smoothstep(.6,1.,1.-uv.y));',
-      ' vec4 fx=texture2D(fxT,uv); vec4 pr=texture2D(perT,uv); float pa=pr.a; vec3 pc=pa>0.?pr.rgb/pa:vec3(0.);',
-      // reveal mask from the cursor trail
+      ' vec3 duo=mix(vec3(.2,.06,.02),vec3(1.,.52,.22),smoothstep(.05,.85,Lb)); duo=mix(duo,vec3(1.,.88,.74),smoothstep(.8,1.,Lb)*.5);',
+      ' float aBg=smoothstep(0.,.38,uv.x)*smoothstep(1.,.8,uv.x)*smoothstep(.02,.45,uv.y)*.8;',
+      ' float sh=ring(uv,18.); duo*=1.-.35*sh; aBg=max(aBg,sh*.25);',
+      ' vec3 base=a>.01?src.rgb/a:vec3(0.); float L=dot(base,vec3(.299,.587,.114));',
+      // a light warm grade so he stands in the same sunset as the page
+      ' vec3 graded=mix(vec3(.06,.05,.1),vec3(1.,.7,.48),smoothstep(0.,.95,L)); base=mix(base,graded,.22);',
+      ' float rim=clamp(a-ring(uv,5.),0.,1.); base+=vec3(1.,.62,.32)*rim*1.3;',
       ' vec2 px=uv*res; float m=0.;',
-      ' for(int i=0;i<' + TRAIL + ';i++){vec3 tr=trail[i];float d=length(px-tr.xy);m=max(m,smoothstep(tr.z,tr.z*.86,d));}',
-      ' m*=hover; m=max(m,glitch.z*step(glitch.x,uv.y)*step(uv.y,glitch.y));',
-      // X-ray: dark film, soft tissue faint, bones glowing
-      ' float Lp=dot(pc,vec3(.299,.587,.114));',
-      ' vec3 xr=vec3(.015,.04,.09)+vec3(.18,.42,.62)*(1.-Lp)*.28;',
-      ' xr+=vec3(.82,.96,1.)*fx.r*1.05+vec3(.25,.75,1.)*fx.g*.55;',
-      ' float sc=abs(fract(uv.y*1.6-t*.35)-.5); xr+=vec3(.3,.85,1.)*smoothstep(.01,0.,sc)*.5*(.3+fx.g);',
-      ' xr+=(hash(px+fract(t)*50.)-.5)*.06;',
-      ' vec3 person=mix(pc*vec3(1.03,1.,.97),xr,m);',
-      // composite: background, then white outline, then the person
-      ' vec3 bgDark=mix(duo,duo*.35,m*.6);',
-      ' vec3 col=bgDark; float a=aBg;',
-      ' float ol=fx.b; vec3 olc=mix(vec3(1.),vec3(.55,.92,1.),m); col=mix(col,olc,ol); a=max(a,ol);',
-      ' col=mix(col,person,pa); a=max(a,pa);',
-      ' float ring=m*(1.-m)*4.; col+=vec3(.3,.85,1.)*ring*.6*max(pa,ol);',
-      ' gl_FragColor=vec4(col*a,a);',
+      ' for(int i=0;i<' + TRAIL + ';i++){vec3 tr=trail[i];float r=tr.z*hover;float d=length(px-tr.xy);m=max(m,smoothstep(r,r*.9,d));}',
+      ' m*=step(.02,hover); m=max(m,glitch.z*step(glitch.x,uv.y)*step(uv.y,glitch.y));',
+      // the stack: a mosaic of tool logos drifting upward, shaded by the body underneath
+      ' vec2 tuv=px/(res.y*.36)+vec2(t*.015,-t*.035);',
+      ' vec3 tools=texture2D(toolT,tuv).rgb;',
+      ' vec3 inside=tools*(.6+.75*smoothstep(.05,.8,L))+vec3(.03,.04,.08)+vec3(1.,.55,.25)*rim;',
+      ' vec3 col=mix(base,inside,m);',
+      ' float rg=m*(1.-m)*4.; col+=vec3(1.,.55,.25)*rg*.5*a;',
+      ' duo=mix(duo,duo*.55,m*.5);',
+      // composite: background first, then the person over it (premultiplied)
+      ' vec3 outc=duo*aBg*(1.-a)+col*a; float outa=aBg*(1.-a)+a;',
+      ' gl_FragColor=vec4(outc,outa);',
       '}'
     ].join('\n');
     var prog = gl.createProgram();
@@ -476,42 +477,54 @@ col("action_type").isin(["collection", "distribution"])</code></pre>
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['res', 't', 'hover', 'glitch'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); }); U.trail = gl.getUniformLocation(prog, 'trail[0]');
-    var loaded = 0, ready = false;
-    function tex(unit, url, premult, name) {
-      var img = new Image();
-      img.onload = function () {
-        var tx = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, tx);
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premult);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-        [gl.TEXTURE_MIN_FILTER, gl.TEXTURE_MAG_FILTER].forEach(function (k) { gl.texParameteri(gl.TEXTURE_2D, k, gl.LINEAR); });
-        [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(function (k) { gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE); });
-        gl.uniform1i(gl.getUniformLocation(prog, name), unit);
-        if (++loaded === 3) { ready = true; gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); }
-      };
-      img.onerror = function () { document.documentElement.classList.add('no-gl'); };
-      img.src = url;
+    gl.uniform1i(gl.getUniformLocation(prog, 'meT'), 0); gl.uniform1i(gl.getUniformLocation(prog, 'toolT'), 1); gl.uniform1i(gl.getUniformLocation(prog, 'bgT'), 2);
+    function upload(unit, source, premult, repeat) {
+      var tx = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, tx);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premult);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+      [gl.TEXTURE_MIN_FILTER, gl.TEXTURE_MAG_FILTER].forEach(function (k) { gl.texParameteri(gl.TEXTURE_2D, k, gl.LINEAR); });
+      var wrap = repeat ? gl.REPEAT : gl.CLAMP_TO_EDGE;
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap);
     }
-    tex(0, 'img/bg.jpg', false, 'bgT'); tex(1, 'img/person.png', true, 'perT'); tex(2, 'img/fx.png', false, 'fxT');
+    // a seamless 1024px tile of every tool logo in its brand colour
+    function toolAtlas() {
+      var c = document.createElement('canvas'), N = 8, cell = 128; c.width = c.height = N * cell;
+      var g = c.getContext('2d'); g.fillStyle = '#0b0d16'; g.fillRect(0, 0, c.width, c.height);
+      for (var r = 0; r < N; r++) for (var k = 0; k < N; k++) {
+        var tl = TOOLS[(r * N + k * 3 + r * 5) % TOOLS.length], x = k * cell, y = r * cell;
+        g.fillStyle = 'rgba(255,255,255,.035)'; g.fillRect(x + 6, y + 6, cell - 12, cell - 12);
+        g.save(); g.translate(x + cell / 2 - 36, y + cell / 2 - 36); g.scale(3, 3);
+        g.shadowColor = tl.c; g.shadowBlur = 6; g.fillStyle = tl.c; g.fill(new Path2D(tl.d)); g.restore();
+      }
+      return c;
+    }
+    var ready = false, img = new Image(), river = new Image(), loaded = 0;
+    function done() { if (++loaded < 2) return; upload(0, img, true, false); upload(1, toolAtlas(), false, true); upload(2, river, false, false);
+      gl.uniform2f(gl.getUniformLocation(prog, 'texel'), 1 / img.width, 1 / img.height); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); ready = true; }
+    img.onload = river.onload = done;
+    img.onerror = function () { document.documentElement.classList.add('no-gl'); };
+    river.onerror = function () { river = img; done(); };
     var dpr = Math.min(devicePixelRatio || 1, 2);
     function size() { cv.width = Math.round(cv.clientWidth * dpr); cv.height = Math.round(cv.clientHeight * dpr); gl.viewport(0, 0, cv.width, cv.height); gl.uniform2f(U.res, cv.width, cv.height); }
     size(); addEventListener('resize', size);
     var hover = 0, t0 = performance.now(), auto = true, glitchUntil = 0, glitchBand = [0, 0], nextGlitch = performance.now() + 2500;
     var arr = new Float32Array(TRAIL * 3);
     faceDraw = function (now) {
+      if (!img.src) { img.src = 'img/me.webp'; river.src = 'img/river.jpg'; }   // TOOLS is defined further down, so build the atlas once everything has loaded
       if (!ready) return;
       var r = cv.getBoundingClientRect(), inside = mouse.x > r.left && mouse.x < r.right && mouse.y > r.top && mouse.y < r.bottom;
       if (mouse.moved && inside) auto = false;
       var tx, ty;
-      if (auto && !reduced) { // until someone hovers, sweep the X-ray over the body so the effect is discoverable (and visible on phones)
-        var s = (now - t0) / 1000; tx = r.width * (.52 + .1 * Math.sin(s * .8)); ty = r.height * (.66 + .12 * Math.sin(s * 1.3));
+      if (auto && !reduced) {
+        var s = (now - t0) / 1000; tx = r.width * (.5 + .16 * Math.sin(s * .8)); ty = r.height * (.55 + .2 * Math.sin(s * 1.3));
         hover += ((Math.sin(s * .6) > -.2 ? .95 : 0) - hover) * .05;
       } else { tx = mouse.x - r.left; ty = mouse.y - r.top; hover += ((inside ? 1 : 0) - hover) * .12; }
-      if (inside) hint.classList.add('gone');
+      if (inside && mouse.moved) hint.classList.add('gone');
       var head = trail[0]; head.x += (tx * dpr - head.x) * .35; head.y += (ty * dpr - head.y) * .35;
       for (var i = 1; i < TRAIL; i++) { trail[i].x += (trail[i - 1].x - trail[i].x) * .38; trail[i].y += (trail[i - 1].y - trail[i].y) * .38; }
-      var R = Math.min(r.width, r.height) * .17 * dpr;
+      var R = Math.min(r.width, r.height) * .2 * dpr;
       for (i = 0; i < TRAIL; i++) { arr[i * 3] = trail[i].x; arr[i * 3 + 1] = trail[i].y; arr[i * 3 + 2] = R * Math.pow(.9, i); }
-      if (now > nextGlitch && !reduced) { glitchUntil = now + 160; var y0 = .5 + Math.random() * .4; glitchBand = [y0, y0 + .02 + Math.random() * .05]; nextGlitch = now + 2600 + Math.random() * 3000; }
+      if (now > nextGlitch && !reduced) { glitchUntil = now + 160; var y0 = .3 + Math.random() * .6; glitchBand = [y0, y0 + .02 + Math.random() * .05]; nextGlitch = now + 2600 + Math.random() * 3000; }
       gl.uniform3f(U.glitch, glitchBand[0], glitchBand[1], now < glitchUntil ? 1 : 0);
       gl.uniform3fv(U.trail, arr); gl.uniform1f(U.hover, hover); gl.uniform1f(U.t, (now - t0) / 1000);
       gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLES, 0, 3);
