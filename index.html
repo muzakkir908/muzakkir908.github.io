@@ -170,6 +170,98 @@ pre code { background: none; padding: 0; font-size: inherit; }
 .contact .links a:hover { border-color: var(--signal); color: var(--signal); }
 .contact .links a.primary:hover { background: var(--signal); color: #fff; }
 
+/* ---------- hero stage ---------- */
+.hero {
+  position: relative; margin: 28px 0 16px; border-radius: 16px; overflow: hidden;
+  background: radial-gradient(120% 90% at 75% 40%, #1d2a36 0%, #10151c 55%, #0b0d11 100%);
+  color: #ece7dc; min-height: 600px;
+  display: grid; grid-template-columns: 1.15fr .85fr; align-items: center;
+  isolation: isolate;
+}
+#scene { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; }
+.hero-copy { padding: 56px 0 56px 52px; position: relative; }
+.hello { font: 500 12.5px/1 var(--mono); color: #b3ad9f; margin: 0 0 22px; letter-spacing: .03em; }
+.hello .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #a3e635; margin-right: 8px; box-shadow: 0 0 0 0 rgba(163,230,53,.6); animation: ping 2s infinite; vertical-align: 0; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(163,230,53,.55); } 80%,100% { box-shadow: 0 0 0 10px rgba(163,230,53,0); } }
+.hero h1 { font: 400 clamp(36px, 5.2vw, 60px)/1.04 var(--serif); letter-spacing: -.02em; margin: 0 0 18px; color: #f4efe4; }
+.hero h1 em { color: #fb923c; font-style: italic; }
+.role { font: 500 15px/1 var(--mono); color: #38bdf8; margin: 0 0 20px; }
+.caret { animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero .lede { font: 400 18px/1.55 var(--serif); color: #c9c3b5; max-width: 32em; margin: 0 0 26px; }
+.hero-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 30px; }
+.hero-stats div { font: 400 12px/1.35 var(--mono); color: #8f897d; }
+.hero-stats b { display: block; font: 400 26px/1.1 var(--serif); color: #f4efe4; margin-bottom: 3px; }
+.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.play {
+  display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+  font: 500 14px/1 var(--mono); color: #10151c; background: #fb923c; border: 0;
+  padding: 14px 18px 14px 14px; border-radius: 999px; transition: transform .15s, background .15s;
+}
+.play:hover { transform: translateY(-2px); background: #fdba74; }
+.play .ico { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #10151c; color: #fb923c; font-size: 10px; }
+.play.on .ico { animation: pulse 1s infinite; }
+@keyframes pulse { 50% { transform: scale(1.18); } }
+.ghost { font: 500 14px/1 var(--mono); color: #ece7dc; text-decoration: none; padding: 14px 16px; border: 1px solid #3a3f47; border-radius: 999px; }
+.ghost:hover { border-color: #fb923c; color: #fb923c; }
+
+.buddy-wrap { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding: 120px 24px 0; }
+.buddy { background: none; border: 0; padding: 0; cursor: pointer; width: min(320px, 100%); display: block; }
+.buddy svg { width: 100%; height: auto; display: block; overflow: visible; }
+.buddy:focus-visible { outline: 2px solid #fb923c; outline-offset: 6px; border-radius: 12px; }
+.bubble {
+  position: absolute; top: 36px; left: 50%; transform: translateX(-50%);
+  width: min(300px, 88%); background: #f4efe4; color: #1d1c1a; border-radius: 16px;
+  padding: 14px 16px; font: 400 14.5px/1.45 var(--sans); box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  min-height: 52px; z-index: 2;
+}
+.bubble::after { content: ""; position: absolute; bottom: -9px; left: 50%; margin-left: -9px; border: 9px solid transparent; border-bottom: 0; border-top-color: #f4efe4; }
+.bubble .said { color: #1d1c1a; }
+.bubble .todo { color: #a8a294; }
+.mute { position: absolute; right: 18px; bottom: 18px; font: 500 12px/1 var(--mono); background: rgba(255,255,255,.08); color: #ece7dc; border: 1px solid #3a3f47; border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+
+/* cartoon motion */
+.body-bob { animation: bob 3.2s ease-in-out infinite; transform-origin: 150px 352px; }
+@keyframes bob { 50% { transform: translateY(-5px); } }
+.shadow { animation: shad 3.2s ease-in-out infinite; transform-origin: 150px 346px; }
+@keyframes shad { 50% { transform: scaleX(.93); opacity: .25; } }
+.arm { transform-origin: 222px 290px; transform-box: view-box; }
+.waving .arm { animation: wave .9s ease-in-out 3; }
+@keyframes wave { 0%,100% { transform: rotate(0); } 25% { transform: rotate(14deg); } 75% { transform: rotate(-12deg); } }
+.head { transform-origin: 150px 220px; transition: transform .25s ease-out; }
+.lids rect { transform: scaleY(0); transform-box: fill-box; transform-origin: top; animation: lid 4.6s infinite; }
+@keyframes lid { 0%, 94%, 100% { transform: scaleY(0); } 97% { transform: scaleY(1); } }
+.pupil { transition: transform .12s ease-out; }
+.talk { display: none; }
+.speaking .smile { display: none; }
+.speaking .talk { display: inline; }
+.speaking .talk.shut ellipse:first-child { transform: scaleY(.35); transform-box: fill-box; transform-origin: center; }
+.speaking .brow { animation: browup .6s ease-in-out infinite alternate; }
+@keyframes browup { to { transform: translateY(-3px); } }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; min-height: 0; }
+  .hero-copy { padding: 36px 22px 8px; order: 2; }
+  .buddy-wrap { order: 1; padding: 108px 16px 0; }
+  .buddy { width: 220px; }
+  .bubble { top: 20px; }
+}
+@media (max-width: 600px) {
+  .hero { margin: 16px -16px; border-radius: 0; }
+  .hero-stats { gap: 20px; }
+  .hero-stats b { font-size: 22px; }
+}
+
+/* scroll reveal + tilt */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.tilt { transition: transform .2s ease-out; transform-style: preserve-3d; will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .body-bob, .shadow, .lids rect, .caret, .hello .dot, .speaking .brow { animation: none !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
 footer { padding: 28px 0 40px; border-top: 1px solid var(--rule); font: 400 12.5px/1.6 var(--mono); color: var(--ink-3); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 </style>
 </head>
@@ -186,20 +278,88 @@ footer { padding: 28px 0 40px; border-top: 1px solid var(--rule); font: 400 12.5
     </nav>
   </header>
 
-  <div class="intro">
-    <div>
+  <div class="hero" id="hero">
+    <canvas id="scene" aria-hidden="true"></canvas>
+
+    <div class="hero-copy">
+      <p class="hello"><span class="dot"></span>Open to roles · Dublin · Stamp 1G</p>
       <h1>I build data pipelines,<br>then I <em>break them</em><br>on purpose.</h1>
-      <p class="lede">I'm Muzakkir, a Cloud, Data and DevOps Engineer in Dublin. I spent 3 years at TCS building PySpark pipelines that ran in production on AWS. I cut data latency from over 20 hours to under 2, and found that 97% of the raw data was duplicates. Now I work with Kubernetes, Terraform and LLM systems, and I learn the most when I deliberately break things.</p>
+      <p class="role">&gt; <span id="role">Cloud engineer</span><span class="caret">_</span></p>
+      <p class="lede">I'm Muzakkir, a Cloud, Data and DevOps Engineer. I spent 3 years at TCS building PySpark pipelines that ran in production on AWS. I cut data latency from over 20 hours to under 2, and found that 97% of the raw data was duplicates.</p>
+      <div class="hero-stats">
+        <div><b>3 yrs</b>TCS, AWS in prod</div>
+        <div><b>20h → 2h</b>data latency</div>
+        <div><b>MSc</b>Cloud Computing, NCI</div>
+      </div>
+      <div class="hero-cta">
+        <button class="play" id="play" type="button"><span class="ico">▶</span><span id="play-label">Hear my 20-second intro</span></button>
+        <a href="#work" class="ghost">See my work ↓</a>
+      </div>
     </div>
-    <div class="status">
-      <div><span class="dot"></span><b>Open to roles</b></div>
-      <div>Data engineering</div>
-      <div>Cloud / DevOps</div>
-      <div>Platform / SRE</div>
-      <div style="margin-top:10px"><b>Dublin</b> · Stamp 1G</div>
-      <div>No sponsorship needed</div>
-      <div style="margin-top:10px">MSc Cloud Computing · <b>NCI</b></div>
-      <div>3 yrs <b>TCS</b> · NSS DigitalTwinx</div>
+
+    <div class="buddy-wrap">
+      <div class="bubble" id="bubble" aria-live="polite">Hi! 👋 Tap me to hear a quick intro.</div>
+      <button class="buddy" id="buddy" type="button" aria-label="Play voice introduction">
+        <svg viewBox="0 0 300 360" role="img" aria-label="Cartoon of Muzakkir waving">
+          <defs>
+            <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d39a6c"/><stop offset="1" stop-color="#b97c50"/></linearGradient>
+            <linearGradient id="hoodie" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26465a"/><stop offset="1" stop-color="#16293a"/></linearGradient>
+          </defs>
+          <ellipse cx="150" cy="346" rx="92" ry="10" fill="#000" opacity=".35" class="shadow"/>
+          <g class="body-bob">
+            <!-- torso -->
+            <path d="M58 352 C60 286 92 252 150 250 C208 252 240 286 242 352 Z" fill="url(#hoodie)"/>
+            <path d="M126 252 L150 290 L174 252 Z" fill="#e9e4d8"/>
+            <path d="M118 250 C128 268 172 268 182 250" fill="none" stroke="#0f1d29" stroke-width="5" stroke-linecap="round"/>
+            <rect x="98" y="300" width="104" height="38" rx="6" fill="#0f1d29" opacity=".55"/>
+            <text x="150" y="324" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" fill="#f97316">&lt;/data&gt;</text>
+            <!-- left arm (resting) -->
+            <path d="M74 300 C64 318 66 338 70 352" stroke="#16293a" stroke-width="26" fill="none" stroke-linecap="round"/>
+            <!-- waving arm -->
+            <g class="arm">
+              <path d="M222 290 C246 270 258 240 256 212" stroke="#1f3a4d" stroke-width="24" fill="none" stroke-linecap="round"/>
+              <g transform="translate(256 196)">
+                <circle r="17" fill="url(#skin)"/>
+                <rect x="-15" y="-34" width="7" height="22" rx="3.5" fill="#c98a5d"/>
+                <rect x="-6" y="-38" width="7" height="25" rx="3.5" fill="#c98a5d"/>
+                <rect x="3" y="-36" width="7" height="24" rx="3.5" fill="#c98a5d"/>
+                <rect x="11" y="-29" width="7" height="19" rx="3.5" fill="#c98a5d"/>
+              </g>
+            </g>
+            <!-- neck + head -->
+            <rect x="134" y="214" width="32" height="40" rx="12" fill="#b07448"/>
+            <g class="head">
+              <ellipse cx="88" cy="150" rx="12" ry="17" fill="#c38656"/>
+              <ellipse cx="212" cy="150" rx="12" ry="17" fill="#c38656"/>
+              <ellipse cx="150" cy="146" rx="62" ry="74" fill="url(#skin)"/>
+              <!-- hair -->
+              <path d="M86 140 C78 86 108 56 150 56 C196 56 226 86 214 140 C206 116 196 104 182 98 C168 108 140 112 116 104 C102 112 92 124 86 140 Z" fill="#1d1612"/>
+              <path d="M112 72 C128 58 158 52 182 64" stroke="#2b211b" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <!-- beard shadow -->
+              <path d="M96 168 C102 212 128 222 150 222 C172 222 198 212 204 168 C196 196 178 206 150 206 C122 206 104 196 96 168 Z" fill="#2a1f19" opacity=".55"/>
+              <!-- brows -->
+              <path class="brow" d="M108 120 Q122 110 136 118" stroke="#1d1612" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <path class="brow" d="M164 118 Q178 110 192 120" stroke="#1d1612" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <!-- eyes -->
+              <g class="eye"><ellipse cx="122" cy="142" rx="13" ry="14" fill="#fff"/><g class="pupil"><circle cx="122" cy="143" r="7" fill="#2a1b12"/><circle cx="125" cy="140" r="2.4" fill="#fff"/></g></g>
+              <g class="eye"><ellipse cx="178" cy="142" rx="13" ry="14" fill="#fff"/><g class="pupil"><circle cx="178" cy="143" r="7" fill="#2a1b12"/><circle cx="181" cy="140" r="2.4" fill="#fff"/></g></g>
+              <g class="lids"><rect x="106" y="126" width="32" height="30" fill="url(#skin)"/><rect x="162" y="126" width="32" height="30" fill="url(#skin)"/></g>
+              <!-- nose + cheeks -->
+              <path d="M150 150 Q144 172 150 176 Q156 178 160 174" stroke="#9c6640" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <ellipse cx="108" cy="176" rx="11" ry="6" fill="#e07a5f" opacity=".25"/>
+              <ellipse cx="192" cy="176" rx="11" ry="6" fill="#e07a5f" opacity=".25"/>
+              <!-- mouth -->
+              <path class="smile" d="M128 190 Q150 208 172 190" stroke="#5a2e1c" stroke-width="5" fill="none" stroke-linecap="round"/>
+              <g class="talk">
+                <ellipse cx="150" cy="196" rx="17" ry="12" fill="#5a2e1c"/>
+                <ellipse cx="150" cy="203" rx="9" ry="4.5" fill="#e0726a"/>
+                <rect x="138" y="186" width="24" height="5" rx="2" fill="#fff"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </button>
+      <button class="mute" id="stop" type="button" hidden>■ Stop</button>
     </div>
   </div>
 
@@ -419,6 +579,206 @@ NULL != "ERROR"  <span class="bad">→ NULL → row dropped, never counted</span
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('theme', next); } catch (e) {}
   });
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 3D scene: a data planet with packets flowing between nodes ---------- */
+  var canvas = document.getElementById('scene'), hero = document.getElementById('hero');
+  if (window.THREE && canvas) {
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(0, 0, 9);
+
+    var world = new THREE.Group(); scene.add(world);
+    var ORANGE = 0xfb923c, BLUE = 0x38bdf8;
+
+    // wireframe planet + soft core
+    var planetGeo = new THREE.IcosahedronGeometry(2.1, 1);
+    var planet = new THREE.LineSegments(new THREE.EdgesGeometry(planetGeo),
+      new THREE.LineBasicMaterial({ color: ORANGE, transparent: true, opacity: .55 }));
+    var core = new THREE.Mesh(new THREE.IcosahedronGeometry(1.95, 2),
+      new THREE.MeshBasicMaterial({ color: 0x1b2733, transparent: true, opacity: .85 }));
+    world.add(core); world.add(planet);
+
+    // nodes on the planet surface = "terminals"
+    var nodes = [], nodeMat = new THREE.MeshBasicMaterial({ color: BLUE });
+    var verts = planetGeo.attributes.position, seen = {};
+    for (var i = 0; i < verts.count && nodes.length < 14; i += 7) {
+      var v = new THREE.Vector3().fromBufferAttribute(verts, i), key = v.toArray().map(function (n) { return n.toFixed(2); }).join();
+      if (seen[key]) continue; seen[key] = 1;
+      var dot = new THREE.Mesh(new THREE.SphereGeometry(.07, 10, 10), nodeMat);
+      dot.position.copy(v); world.add(dot); nodes.push(v);
+    }
+
+    // arcs between nodes with packets travelling along them
+    var arcs = [];
+    for (var a = 0; a < nodes.length - 1; a++) {
+      var p0 = nodes[a], p1 = nodes[(a * 5 + 3) % nodes.length];
+      if (p0.distanceTo(p1) < 1) continue;
+      var mid = p0.clone().add(p1).multiplyScalar(.5).normalize().multiplyScalar(3.1);
+      var curve = new THREE.QuadraticBezierCurve3(p0, mid, p1);
+      var line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(40)),
+        new THREE.LineBasicMaterial({ color: BLUE, transparent: true, opacity: .22 }));
+      world.add(line);
+      var packet = new THREE.Mesh(new THREE.SphereGeometry(.05, 8, 8), new THREE.MeshBasicMaterial({ color: 0xfde68a }));
+      world.add(packet);
+      arcs.push({ curve: curve, packet: packet, t: Math.random(), speed: .0025 + Math.random() * .004 });
+    }
+
+    // orbit ring
+    var ring = new THREE.Mesh(new THREE.TorusGeometry(3.4, .008, 6, 160),
+      new THREE.MeshBasicMaterial({ color: ORANGE, transparent: true, opacity: .35 }));
+    ring.rotation.x = 1.2; world.add(ring);
+
+    // starfield
+    var starGeo = new THREE.BufferGeometry(), pts = [];
+    for (var s = 0; s < 600; s++) pts.push((Math.random() - .5) * 40, (Math.random() - .5) * 24, -Math.random() * 20 - 2);
+    starGeo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+    var stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xcbd5e1, size: .04, transparent: true, opacity: .7 }));
+    scene.add(stars);
+
+    var mouse = { x: 0, y: 0 };
+    hero.addEventListener('pointermove', function (e) {
+      var r = hero.getBoundingClientRect();
+      mouse.x = (e.clientX - r.left) / r.width - .5; mouse.y = (e.clientY - r.top) / r.height - .5;
+    });
+
+    function resize() {
+      var w = hero.clientWidth, h = hero.clientHeight;
+      renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+      var narrow = w < 860;
+      world.position.set(narrow ? 0 : 2.9, narrow ? 2.1 : 0.2, 0);
+      world.scale.setScalar(narrow ? .62 : 1);
+    }
+    resize(); addEventListener('resize', resize);
+
+    var visible = true;
+    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && !reduced) loop(); }).observe(hero);
+
+    var running = false;
+    function frame() {
+      world.rotation.y += .0022; world.rotation.x = Math.sin(Date.now() / 4000) * .12;
+      ring.rotation.z += .0015;
+      arcs.forEach(function (o) { o.t = (o.t + o.speed) % 1; o.packet.position.copy(o.curve.getPoint(o.t)); });
+      stars.rotation.z += .0002;
+      camera.position.x += (mouse.x * 1.4 - camera.position.x) * .04;
+      camera.position.y += (-mouse.y * 1 - camera.position.y) * .04;
+      camera.lookAt(0, 0, 0);
+      renderer.render(scene, camera);
+    }
+    function loop() {
+      if (running) return; running = true;
+      (function tick() { if (!visible) { running = false; return; } frame(); requestAnimationFrame(tick); })();
+    }
+    if (reduced) frame(); else loop();
+  }
+
+  /* ---------- rotating role line ---------- */
+  var roles = ['Cloud engineer', 'Data engineer', 'DevOps engineer', 'PySpark on AWS', 'Kubernetes · Terraform'];
+  var roleEl = document.getElementById('role'), ri = 0;
+  if (!reduced) setInterval(function () {
+    ri = (ri + 1) % roles.length; var word = roles[ri], n = 0;
+    var t = setInterval(function () { roleEl.textContent = word.slice(0, ++n); if (n >= word.length) clearInterval(t); }, 45);
+  }, 2600);
+
+  /* ---------- cartoon: eyes follow cursor, wave hello ---------- */
+  var buddy = document.getElementById('buddy'), svg = buddy.querySelector('svg');
+  var pupils = svg.querySelectorAll('.pupil'), head = svg.querySelector('.head');
+  addEventListener('pointermove', function (e) {
+    var r = svg.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * .4;
+    var dx = Math.max(-1, Math.min(1, (e.clientX - cx) / 400)), dy = Math.max(-1, Math.min(1, (e.clientY - cy) / 400));
+    pupils.forEach(function (p) { p.style.transform = 'translate(' + dx * 4.5 + 'px,' + dy * 4 + 'px)'; });
+    head.style.transform = 'rotate(' + dx * 4 + 'deg)';
+  });
+  function wave() { svg.classList.remove('waving'); void svg.getBoundingClientRect(); svg.classList.add('waving'); }
+  setTimeout(wave, 600);
+
+  /* ---------- voice intro with captions + lip sync ---------- */
+  var script = "Hi, I'm Muzakkir, welcome to my portfolio! I'm a cloud, data and DevOps engineer based in Dublin. " +
+    "I spent three years at TCS building data pipelines on AWS, where I cut data latency from over twenty hours to under two. " +
+    "These days I work with Kubernetes, Terraform and AI systems, and I like breaking things on purpose, just to learn how they fail. " +
+    "Have a look around, and if you're hiring, let's talk!";
+  var bubble = document.getElementById('bubble'), playBtn = document.getElementById('play'),
+      playLabel = document.getElementById('play-label'), stopBtn = document.getElementById('stop');
+  var synth = window.speechSynthesis, talking = false, flap = null, capTimer = null;
+
+  function caption(upto) {
+    bubble.innerHTML = '<span class="said"></span><span class="todo"></span>';
+    bubble.firstChild.textContent = script.slice(0, upto);
+    bubble.lastChild.textContent = script.slice(upto);
+  }
+  function pickVoice() {
+    var vs = synth.getVoices(), prefs = ['Microsoft Ryan', 'Microsoft Prabhat', 'Microsoft Ravi', 'Google UK English Male', 'Microsoft George', 'Microsoft Guy', 'Rishi', 'Daniel', 'Microsoft Connor', 'Microsoft David', 'Microsoft Mark', 'Alex'];
+    for (var i = 0; i < prefs.length; i++) for (var j = 0; j < vs.length; j++) if (vs[j].name.indexOf(prefs[i]) === 0) return vs[j];
+    return vs.filter(function (v) { return /^en/i.test(v.lang); })[0] || null;
+  }
+  function setTalking(on) {
+    talking = on;
+    svg.classList.toggle('speaking', on);
+    playBtn.classList.toggle('on', on);
+    playLabel.textContent = on ? 'Playing…' : 'Hear it again';
+    stopBtn.hidden = !on;
+    var talk = svg.querySelector('.talk');
+    clearInterval(flap); clearInterval(capTimer);
+    if (on) flap = setInterval(function () { talk.classList.toggle('shut', Math.random() < .45); }, 110);
+  }
+  function stop(finished) {
+    if (synth) synth.cancel();
+    setTalking(false);
+    if (finished) caption(script.length); else bubble.textContent = 'No problem. Tap me any time to hear it again 👋';
+  }
+  function speak() {
+    if (talking) return stop(false);
+    wave();
+    if (!synth || !window.SpeechSynthesisUtterance) { caption(script.length); return; }
+    synth.cancel();
+    var u = new SpeechSynthesisUtterance(script), v = pickVoice();
+    if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-GB';
+    u.rate = 1; u.pitch = 1;
+    var gotBoundary = false, start = 0;
+    u.onstart = function () {
+      setTalking(true); start = Date.now(); caption(0);
+      // estimate caption progress for voices that don't report word boundaries
+      capTimer = setInterval(function () { if (!gotBoundary) caption(Math.min(script.length, Math.round((Date.now() - start) / 1000 * 15.5))); }, 120);
+    };
+    u.onboundary = function (e) {
+      if (e.name && e.name !== 'word') return;
+      gotBoundary = true; var end = script.indexOf(' ', e.charIndex); caption(end < 0 ? script.length : end);
+    };
+    u.onend = function () { stop(true); };
+    u.onerror = function (e) { if (e.error !== 'interrupted' && e.error !== 'canceled') { setTalking(false); caption(script.length); } };
+    synth.speak(u);
+  }
+  if (synth) { synth.getVoices(); synth.onvoiceschanged = function () { synth.getVoices(); }; }
+  buddy.addEventListener('click', speak);
+  playBtn.addEventListener('click', speak);
+  stopBtn.addEventListener('click', function () { stop(false); });
+
+  /* ---------- scroll reveal + subtle 3D tilt ---------- */
+  var revealables = document.querySelectorAll('section, .work li, .flow, .incident');
+  if ('IntersectionObserver' in window && !reduced) {
+    var ro = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
+    }, { threshold: .12 });
+    revealables.forEach(function (el) { el.classList.add('reveal'); ro.observe(el); });
+  }
+  if (!reduced && matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.flow div, .incident, .hero-stats div').forEach(function (el) {
+      el.classList.add('tilt');
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        el.style.transform = 'perspective(700px) rotateY(' + x * 8 + 'deg) rotateX(' + -y * 8 + 'deg) translateZ(4px)';
+      });
+      el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+    });
+  }
 })();
 </script>
 </body>
