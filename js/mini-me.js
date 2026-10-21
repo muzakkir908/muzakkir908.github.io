@@ -20,7 +20,7 @@ function stripes() {
 
 function buildCharacter() {
   const M = {
-    suit: new THREE.MeshStandardMaterial({ color: 0x1d2850, roughness: .8, metalness: .04 }),
+    suit: new THREE.MeshPhysicalMaterial({ color: 0x151d3b, roughness: .84, sheen: .6, sheenRoughness: .6, sheenColor: new THREE.Color(0x3b4a7a) }),
     lapel: new THREE.MeshStandardMaterial({ color: 0x172042, roughness: .55, side: THREE.DoubleSide }),
     shirt: new THREE.MeshStandardMaterial({ map: stripes(), roughness: .85, side: THREE.DoubleSide }),
     white: new THREE.MeshStandardMaterial({ color: 0xf5f3ef, roughness: .8, side: THREE.DoubleSide }),
@@ -57,9 +57,13 @@ function buildCharacter() {
 
   const spine = G(); spine.position.y = .06; hips.add(spine);
   const chest = G(); chest.position.y = .2; spine.add(chest);
-  const jacket = mesh(new THREE.CylinderGeometry(.205, .19, .74, 32, 1), M.suit, 0, 0, 0); jacket.scale.z = .64; chest.add(jacket);
-  const shoulders = mesh(capsule(.088, .25), M.suit, 0, .31, 0); shoulders.rotation.z = Math.PI / 2; shoulders.scale.set(1, 1, .78); chest.add(shoulders);
-  const zf = .133; // front of the jacket
+  // jacket: a lathed silhouette — flared hem, nipped waist, full chest, rounded shoulders
+  const profile = [[.001, -.385], [.198, -.385], [.203, -.36], [.188, -.24], [.176, -.13], [.186, 0], [.205, .13], [.214, .24], [.208, .3], [.186, .345], [.15, .378], [.1, .4], [.06, .408], [.001, .41]]
+    .map(([r, y]) => new THREE.Vector2(r, y));
+  const jacket = mesh(new THREE.LatheGeometry(profile, 48), M.suit, 0, 0, 0); jacket.scale.set(1.04, 1, .64); chest.add(jacket);
+  for (const s of [1, -1]) { const pad = mesh(new THREE.SphereGeometry(.075, 20, 14), M.suit, .19 * s, .3, 0); pad.scale.set(1, .85, .95); chest.add(pad); }
+  const jacketBack = mesh(new THREE.SphereGeometry(.16, 24, 16), M.suit, 0, .08, -.02); jacketBack.scale.set(1.05, 1.9, .55); chest.add(jacketBack);
+  const zf = .137; // front of the jacket
   const shirt = mesh(shape([[-.068, .4], [.068, .4], [0, .06]]), M.shirt, 0, 0, zf); chest.add(shirt);
   chest.add(mesh(shape([[-.07, .41], [-.012, .37], [-.045, .3]]), M.white, 0, 0, zf + .004));
   chest.add(mesh(shape([[.07, .41], [.012, .37], [.045, .3]]), M.white, 0, 0, zf + .004));
@@ -119,7 +123,7 @@ function buildCharacter() {
   // arms with hands; index finger extends when pointing
   const arms = {};
   for (const s of [1, -1]) {
-    const sh = G(); sh.position.set(.21 * s, .3, 0); chest.add(sh);
+    const sh = G(); sh.position.set(.215 * s, .3, 0); chest.add(sh);
     sh.add(mesh(new THREE.SphereGeometry(.064, 18, 12), M.suit, 0, 0, 0));
     sh.add(mesh(new THREE.CylinderGeometry(.062, .054, .3, 18), M.suit, 0, -.15, 0));
     const el = G(); el.position.y = -.3; sh.add(el);
@@ -142,6 +146,7 @@ const DOWN = new THREE.Vector3(0, -1, 0);
 class Rig {
   constructor(c) { Object.assign(this, { c, phase: 0, t: 0, walk: 0, wave: 0, point: 0, talk: 0, open: 0, pointSide: -1, aim: new THREE.Vector3(0, -1, 0) }); this.q = new THREE.Quaternion(); this.qc = new THREE.Quaternion(); }
   advance(dist) { this.phase += dist / STRIDE * Math.PI; }
+  shuffle(turn) { this.phase += Math.min(.25, Math.abs(turn) * 1.6); this.walk = Math.max(this.walk, Math.min(.45, Math.abs(turn) * 6)); }
   // aim at a world-space point with the arm on `side`
   aimAt(world, side) {
     this.pointSide = side;
@@ -166,23 +171,31 @@ class Rig {
       const flex = Math.max(0, Math.cos(ph + .2));
       L.thigh.rotation.set(-.41 * sw * w - .02 * (1 - w), 0, .015 * side);
       L.knee.rotation.x = (.07 + .88 * flex * flex) * w + .05 * (1 - w);
-      const push = Math.max(0, Math.sin(ph - .25) - .55) * 1.4; // heel lifts as the leg trails
-      L.ankle.rotation.x = -(L.thigh.rotation.x + L.knee.rotation.x) * w + push * w * .9;
+      const push = Math.max(0, Math.sin(ph - .25) - .55) * 1.4;   // heel lifts as the leg trails (toe-off)
+      const strike = Math.max(0, Math.sin(ph + .15) - .7) * 1.6;  // toes up as the heel lands
+      const idleBend = (1 - w) * Math.max(0, Math.sin(t * .45 + (side > 0 ? 0 : Math.PI))) * .12; // weight shift
+      L.knee.rotation.x += idleBend; L.thigh.rotation.x -= idleBend * .5;
+      L.ankle.rotation.x = -(L.thigh.rotation.x + L.knee.rotation.x) * w - idleBend * .5 * (1 - w) + push * w * .9 - strike * w * .45;
     }
     // pelvis bobs twice per stride, rolls and twists; spine counter-rotates; head stays level
-    const breathe = Math.sin(t * 1.7) * (1 - w);
-    c.hips.position.y = .98 - .032 * (1 - Math.cos(2 * p)) * .5 * w - .012 * (1 - w) + breathe * .003;
-    c.hips.position.x = Math.sin(t * .7) * .012 * (1 - w);
-    c.hips.rotation.set(0, -.13 * Math.sin(p) * w, .05 * Math.sin(p) * w + Math.sin(t * .7) * .015 * (1 - w));
-    c.spine.rotation.set(.05 * w + breathe * .012 + .02, .22 * Math.sin(p) * w, -.04 * Math.sin(p) * w);
-    c.neck.rotation.set(-.05 * w + (Math.sin(t * 3.1) * .05 + this.open * .1) * this.talk, -(c.hips.rotation.y + c.spine.rotation.y) * .9 + Math.sin(t * .9) * .05 * this.talk, Math.sin(t * 1.6) * .035 * this.talk);
+    const breathe = Math.sin(t * 1.6), shift = Math.sin(t * .45);
+    const accel = this.accel || 0; // lean into starts, settle on stops
+    c.hips.position.y = .98 - .03 * (1 - Math.cos(2 * p)) * .5 * w - .012 * (1 - w) + breathe * .002 * (1 - w);
+    c.hips.position.x = shift * .022 * (1 - w);
+    c.hips.rotation.set(0, -.13 * Math.sin(p) * w, .05 * Math.sin(p) * w + shift * .03 * (1 - w));
+    c.spine.rotation.set(.045 * w + breathe * .012 + .015 + accel * .06, .2 * Math.sin(p - .15) * w, -.05 * Math.sin(p) * w - shift * .025 * (1 - w));
+    c.chest.rotation.set(breathe * .008, .04 * Math.sin(p - .3) * w, -.02 * Math.sin(p - .2) * w);
+    c.chest.scale.set(1 + breathe * .006 * (1 - w), 1, 1 + breathe * .01 * (1 - w));
+    c.neck.rotation.set(-.05 * w + .012 * Math.cos(2 * p) * w - c.spine.rotation.x * .5 + (Math.sin(t * 3.1) * .05 + this.open * .1) * this.talk, -(c.hips.rotation.y + c.spine.rotation.y) * .9 + Math.sin(t * .9) * .05 * this.talk, Math.sin(t * 1.6) * .035 * this.talk);
 
     // arms: swing against the legs, relaxed elbows; then layer talk / wave / point on top
     for (const side of [1, -1]) {
-      const A = c.arms[side], swing = .36 * side * Math.sin(p) * w;
-      A.sh.rotation.set(swing + .03, 0, .1 * side);
-      A.el.rotation.set(-(.2 + .3 * Math.max(0, -swing / .36)) * w - .14 * (1 - w), 0, 0);
-      A.wr.rotation.set(-.1, 0, 0);
+      // arms trail the legs a little (follow-through), elbows bend more on the forward swing
+      const A = c.arms[side], sp = Math.sin(p - .35), swing = .34 * side * sp * w;
+      const lag = Math.sin(p - .9) * side;
+      A.sh.rotation.set(swing + .03 + Math.sin(t * .8 + side) * .015 * (1 - w), side * .05 * w, .12 * side + shift * .02 * side * (1 - w));
+      A.el.rotation.set(-(.22 + .32 * Math.max(0, -lag)) * w - .16 * (1 - w) - breathe * .01, 0, 0);
+      A.wr.rotation.set(-.12 + lag * .08 * w, 0, -side * .1);
       A.finger.visible = false;
     }
     if (this.talk > .01) { // talking: right hand gestures, left hand relaxed forward
@@ -360,12 +373,15 @@ if (!heroCanvas) {
       S.yaw = angleLerp(S.yaw, dir * Math.PI / 2, damp(dt, 9));
       const facing = Math.abs(Math.abs(S.yaw) - Math.PI / 2) < .5;
       if (Math.abs(d) < .03 || reduced) {
-        S.x = S.goal;
+        S.x = S.goal; S.spd = 0; Wl.rig.accel = 0;
         if (S.greet) { S.greet = false; S.waveUntil = now + 2400; say("Hey! I'm mini Muzakkir. Let me show you around 👋", 3200); S.state = 'idle'; S.wait = 2.6; }
         else if (S.target) { S.state = 'point'; S.wait = 3.8; S.recent.push(S.target.el); if (S.recent.length > 6) S.recent.shift(); say(S.target.text, 3800); }
         else { S.state = 'idle'; S.wait = 1.4 + Math.random() * 2.4; }
       } else if (facing) {
-        const step = Math.min(Math.abs(d), 1.45 * dt); S.x += dir * step; Wl.rig.advance(step); walking = true;
+        const want = Math.min(1.4, Math.abs(d) * 1.5 + .2);           // slow down as he arrives
+        const prev = S.spd || 0; S.spd = lerp(prev, want, damp(dt, 2.5)); // and ease in when he sets off
+        Wl.rig.accel = Math.max(-1, Math.min(1, (S.spd - prev) / Math.max(dt, .001) * .35));
+        const step = Math.min(Math.abs(d), S.spd * dt); S.x += dir * step; Wl.rig.advance(step); walking = true;
       }
     } else if (S.state === 'point') {
       const r = S.target.el.getBoundingClientRect();
@@ -390,6 +406,9 @@ if (!heroCanvas) {
     }
     if (S.state !== 'point') beamOff();
 
+    const turn = S.yaw - (S.lastYaw ?? S.yaw); S.lastYaw = S.yaw;
+    if (!walking && Math.abs(turn) > .002 && !reduced) Wl.rig.shuffle(turn);
+    if (!walking) Wl.rig.accel = lerp(Wl.rig.accel || 0, 0, damp(dt, 4));
     Wl.c.root.position.x = S.x; Wl.c.root.rotation.y = S.yaw;
     Wl.key.position.set(S.x + 2.5, 5, 4); Wl.key.target.position.set(S.x, 1, 0);
     Wl.rig.update(dt, { walking, waving, pointing, talking, open });
