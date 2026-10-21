@@ -364,6 +364,58 @@ body.talking .cam-play span { animation: none; }
 .guide-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
 @media (max-width: 900px) { .cam { width: min(340px, 86%); transform: none; } }
 
+/* ---------- 3D character ---------- */
+.hero-char { position: relative; z-index: 2; width: min(420px, 92%); height: min(640px, 74vh); margin: 0 auto; display: flex; align-items: flex-end; justify-content: center; }
+.char { position: relative; display: block; aspect-ratio: 399 / 1021; will-change: transform; }
+.char img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+.char .legs { transform-origin: 48.12% 53.85%; will-change: transform; }
+.char .upper { transform-origin: 50% 60%; }
+.char.big { height: 90%; margin-bottom: 4%; filter: drop-shadow(0 30px 34px rgba(0,0,0,.5)) drop-shadow(0 0 40px rgba(94,234,212,.12)); }
+.runway { position: absolute; left: 50%; bottom: -24px; width: 170%; height: 230px; transform: translateX(-50%) perspective(420px) rotateX(64deg); transform-origin: 50% 100%;
+  background:
+    radial-gradient(ellipse at 50% 70%, rgba(94,234,212,.28), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(153,246,228,.45) 0 2px, transparent 2px 40px),
+    repeating-linear-gradient(90deg, rgba(125,211,252,.25) 0 1px, transparent 1px 56px);
+  -webkit-mask: linear-gradient(0deg, #000 25%, transparent 95%); mask: linear-gradient(0deg, #000 25%, transparent 95%);
+  animation: runway 1.15s linear infinite; }
+@keyframes runway { from { background-position: 0 0, 0 0, 0 0; } to { background-position: 0 0, 0 40px, 0 0; } }
+.hero-bubble { position: absolute; z-index: 4; top: 0; left: 50%; transform: translateX(-50%); width: min(340px, 100%);
+  background: rgba(240,253,250,.96); color: #06202a; border-radius: 16px; padding: 12px 15px; font: 500 14.5px/1.45 var(--sans);
+  box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.hero-bubble::after { content: ""; position: absolute; bottom: -8px; left: 50%; margin-left: -8px; border: 8px solid transparent; border-bottom: 0; border-top-color: rgba(240,253,250,.96); }
+.hero-bubble:empty { display: none; }
+.hero-bubble .todo { color: rgba(6,32,42,.38); }
+.hero-char .cam-play { left: auto; right: -8px; top: 38%; transform: none; }
+.hero-char .eq { right: auto; left: 50%; bottom: 2px; transform: translateX(-50%); width: 110px; height: 22px; opacity: .85; }
+
+/* ---------- mini me walking around the page ---------- */
+.walkway { position: fixed; left: 0; right: 0; bottom: 0; height: 2px; z-index: 43; pointer-events: none; opacity: 0; transition: opacity .5s;
+  background: linear-gradient(90deg, transparent, rgba(94,234,212,.7), rgba(125,211,252,.7), rgba(196,181,253,.6), transparent);
+  box-shadow: 0 0 18px rgba(94,234,212,.6); }
+.walkway.on { opacity: 1; }
+.walker { position: fixed; left: 0; bottom: 4px; z-index: 46; width: 66px; height: 169px; pointer-events: none; opacity: 0; transition: opacity .45s; will-change: transform; }
+.walker.show { opacity: 1; }
+.w-body { position: absolute; inset: 0; background: none; border: 0; padding: 0; cursor: pointer; pointer-events: auto; }
+.walker:not(.show) .w-body { pointer-events: none; }
+.w-body:focus-visible { outline: 2px solid #5eead4; outline-offset: 4px; border-radius: 10px; }
+.char.mini { position: absolute; inset: 0; height: 100%; filter: drop-shadow(0 8px 10px rgba(0,0,0,.45)); }
+.w-shadow { position: absolute; left: 50%; bottom: -3px; width: 46px; height: 8px; margin-left: -23px; border-radius: 50%; background: radial-gradient(rgba(0,0,0,.55), transparent 70%); }
+.w-bubble { position: absolute; left: 0; bottom: calc(100% + 4px); width: max-content; max-width: min(250px, 70vw);
+  background: #effdfa; color: #06202a; font: 500 13px/1.4 var(--sans); padding: 9px 12px; border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.45), 0 0 0 1px rgba(94,234,212,.4); opacity: 0; transform: translateY(6px); transition: opacity .25s, transform .25s; }
+.walker.say .w-bubble { opacity: 1; transform: none; }
+.w-bubble .todo { color: rgba(6,32,42,.38); }
+.beam { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 45; pointer-events: none; overflow: visible; }
+#beam-line { stroke: #ccfbf1; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 12 7; opacity: 0; transition: opacity .25s;
+  filter: drop-shadow(0 0 4px #5eead4) drop-shadow(0 0 10px rgba(94,234,212,.8)); animation: beamdash .45s linear infinite; }
+@keyframes beamdash { to { stroke-dashoffset: -19; } }
+#beam-dot { fill: rgba(94,234,212,.35); stroke: #ccfbf1; stroke-width: 3; filter: drop-shadow(0 0 8px #5eead4); opacity: 0; transition: opacity .25s; transform-box: fill-box; transform-origin: center; animation: beamping 1s ease-out infinite; }
+@keyframes beamping { 0% { transform: scale(.6); } 100% { transform: scale(1.6); opacity: .1; } }
+.beam.on #beam-line, .beam.on #beam-dot { opacity: 1; }
+.pointed { box-shadow: 0 0 0 2px rgba(94,234,212,.75), 0 0 34px rgba(94,234,212,.3) !important; border-radius: 12px; transition: box-shadow .3s; }
+@media (max-width: 600px) { .walker { width: 50px; height: 128px; } .w-shadow { width: 36px; margin-left: -18px; } }
+@media (prefers-reduced-motion: reduce) { .runway, #beam-line, #beam-dot { animation: none; } }
+
 /* ---------- whole-site layer ---------- */
 .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60; transform-origin: left; transform: scaleX(0);
   background: linear-gradient(90deg, #5eead4, #38bdf8, #a78bfa); box-shadow: 0 0 12px rgba(56,189,248,.6); }
@@ -490,16 +542,15 @@ footer { padding: 28px 0 40px; border-top: 1px solid var(--rule); font: 400 12.5
 
     <div class="stage" id="stage">
       <div class="orbit" id="orbit" aria-hidden="true"></div>
-      <div class="cam" id="cam">
-        <canvas id="face" role="img" aria-label="Muzakkir Pathan, in sunglasses and a navy blazer by the River Liffey in Dublin"></canvas>
-        <img id="face-img" src="img/portrait.jpg" alt="Muzakkir Pathan by the River Liffey in Dublin" hidden>
-        <div class="cam-top"><span class="live"><i></i>LIVE</span><span>Dublin · IE</span></div>
-        <button class="cam-play" id="buddy" type="button" aria-label="Play voice introduction"><span>▶</span>Tap to hear me</button>
-        <div class="cam-bottom">
-          <div class="captions" id="bubble" aria-live="polite"></div>
-          <div class="nametag"><b>Muzakkir Pathan</b><span>Data · Cloud · DevOps Engineer</span></div>
-          <canvas class="eq" id="eq" aria-hidden="true"></canvas>
+      <div class="hero-char" id="cam">
+        <div class="runway" aria-hidden="true"></div>
+        <div class="char big" id="char-big" role="img" aria-label="3D character of Muzakkir in a navy double-breasted suit and sunglasses, walking">
+          <img class="legs" src="img/legs.webp" alt="">
+          <img class="upper" src="img/upper.webp" alt="">
         </div>
+        <div class="hero-bubble" id="bubble" aria-live="polite"></div>
+        <button class="cam-play" id="buddy" type="button" aria-label="Play voice introduction"><span>▶</span>Tap to hear me</button>
+        <canvas class="eq" id="eq" aria-hidden="true"></canvas>
       </div>
       <button class="mute" id="stop" type="button" hidden>■ Stop</button>
     </div>
@@ -716,10 +767,19 @@ NULL != "ERROR"  <span class="bad">→ NULL → row dropped, never counted</span
 </div>
 
 
-<button class="guide" id="guide" type="button" aria-label="Play Muzakkir's voice introduction">
-  <span class="guide-say" id="guide-say"></span>
-  <span class="guide-face" id="guide-face"><img src="img/face.jpg" alt=""></span>
-</button>
+<div class="walkway" id="walkway" aria-hidden="true"></div>
+<svg class="beam" id="beam" aria-hidden="true">
+  <defs><linearGradient id="beamGrad"><stop offset="0" stop-color="#99f6e4"/><stop offset="1" stop-color="#7dd3fc"/></linearGradient></defs>
+  <line id="beam-line" x1="0" y1="0" x2="0" y2="0"/>
+  <circle id="beam-dot" cx="0" cy="0" r="7"/>
+</svg>
+<div class="walker" id="walker">
+  <div class="w-bubble" id="w-bubble"></div>
+  <button class="w-body" id="w-body" type="button" aria-label="Play Muzakkir's voice introduction">
+    <span class="char mini"><img class="legs" src="img/legs.webp" alt=""><img class="upper" src="img/upper.webp" alt=""></span>
+  </button>
+  <span class="w-shadow"></span>
+</div>
 
 <script>
 (function () {
@@ -929,87 +989,31 @@ NULL != "ERROR"  <span class="bad">→ NULL → row dropped, never counted</span
   }
   (function orbitLoop() { spin += reduced ? 0 : .0035; placeChips(); if (!reduced) requestAnimationFrame(orbitLoop); })();
 
-  /* ---------- talking portrait: the real photo, animated in WebGL ---------- */
-  var cam = document.getElementById('cam'), faceCv = document.getElementById('face'), faceImg = document.getElementById('face-img');
-  var buddy = document.getElementById('buddy'), eqCv = document.getElementById('eq'), eq = eqCv.getContext('2d');
-  var open = 0, openT = 0, talkAmt = 0, talking = false, levels = new Array(14).fill(0);
-  var fgl = faceCv.getContext('webgl', { antialias: true, premultipliedAlpha: false });
-  var faceReady = false, fU = {};
-  if (fgl) {
-    var fvs = 'attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
-    var ffs = [
-      'precision highp float;',
-      'varying vec2 v; uniform sampler2D tex; uniform float open; uniform float t; uniform float talk;',
-      // landmarks in the cropped portrait (0..1, y down)
-      'const vec2 M=vec2(.509,.289); const float CHIN=.362; const float JHW=.086; const float MHW=.034; const vec2 HC=vec2(.49,.215);',
-      'void main(){',
-      '  vec2 uv=v;',
-      '  float z=1.015+.006*sin(t*1.25);',                       // breathing / handheld camera
-      '  uv=(uv-vec2(.5,.33))/z+vec2(.5,.33);',
-      '  uv+=vec2(sin(t*.37)*.0022,cos(t*.29)*.0016);',
-      '  vec2 hd=(uv-HC)/vec2(.2,.28); float hm=smoothstep(1.,.5,length(hd));',   // head-only motion
-      '  vec2 nod=vec2(sin(t*.8)*.0024+sin(t*2.6)*.0014*talk, sin(t*1.1)*.0011+open*.0032+sin(t*3.1)*.0009*talk);',
-      '  uv-=nod*hm;',
-      '  float ax=abs(uv.x-M.x);',                                // jaw drop: lower face slides down with the voice
-      '  float w=smoothstep(JHW*1.35,JHW*.45,ax)*smoothstep(CHIN+.075,CHIN-.005,uv.y)*smoothstep(M.y-.004,M.y+.006,uv.y);',
-      '  vec2 suv=uv-vec2(0.,open*.018*w);',
-      '  vec3 col=texture2D(tex,suv).rgb;',
-      '  float oy=max(open*.0088,.0001);',                         // the opening between the lips
-      '  vec2 mq=(uv-vec2(M.x,M.y+oy*.5))/vec2(MHW*(.8+.15*open),oy);',
-      '  float inner=smoothstep(1.,.55,length(mq))*smoothstep(.04,.18,open);',
-      '  vec3 mouthCol=mix(vec3(.06,.022,.02),vec3(.2,.075,.065),smoothstep(.0,1.,mq.y*.5+.5));',
-      '  float teeth=smoothstep(-1.,-.6,mq.y)*smoothstep(-.15,-.5,mq.y)*smoothstep(.8,.4,abs(mq.x))*smoothstep(.3,.7,open);',
-      '  mouthCol=mix(mouthCol,vec3(.7,.66,.62),teeth*.5);',
-      '  col=mix(col,mouthCol,inner);',
-      '  col*=1.-.32*pow(length(v-vec2(.5,.42))*1.25,2.6);',
-      '  gl_FragColor=vec4(col,1.);',
-      '}'
-    ].join('\n');
-    var fp = fgl.createProgram();
-    [[fgl.VERTEX_SHADER, fvs], [fgl.FRAGMENT_SHADER, ffs]].forEach(function (x) {
-      var sh2 = fgl.createShader(x[0]); fgl.shaderSource(sh2, x[1]); fgl.compileShader(sh2);
-      if (!fgl.getShaderParameter(sh2, fgl.COMPILE_STATUS)) console.error(fgl.getShaderInfoLog(sh2)); fgl.attachShader(fp, sh2);
-    });
-    fgl.linkProgram(fp); fgl.useProgram(fp);
-    var fb = fgl.createBuffer(); fgl.bindBuffer(fgl.ARRAY_BUFFER, fb);
-    fgl.bufferData(fgl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), fgl.STATIC_DRAW);
-    var fl = fgl.getAttribLocation(fp, 'p'); fgl.enableVertexAttribArray(fl); fgl.vertexAttribPointer(fl, 2, fgl.FLOAT, false, 0, 0);
-    ['open', 't', 'talk'].forEach(function (n) { fU[n] = fgl.getUniformLocation(fp, n); });
-    var img = new Image();
-    img.onload = function () {
-      var tx = fgl.createTexture(); fgl.bindTexture(fgl.TEXTURE_2D, tx);
-      fgl.texImage2D(fgl.TEXTURE_2D, 0, fgl.RGB, fgl.RGB, fgl.UNSIGNED_BYTE, img);
-      fgl.texParameteri(fgl.TEXTURE_2D, fgl.TEXTURE_MIN_FILTER, fgl.LINEAR); fgl.texParameteri(fgl.TEXTURE_2D, fgl.TEXTURE_MAG_FILTER, fgl.LINEAR);
-      fgl.texParameteri(fgl.TEXTURE_2D, fgl.TEXTURE_WRAP_S, fgl.CLAMP_TO_EDGE); fgl.texParameteri(fgl.TEXTURE_2D, fgl.TEXTURE_WRAP_T, fgl.CLAMP_TO_EDGE);
-      faceReady = true;
-    };
-    img.onerror = function () { faceCv.hidden = true; faceImg.hidden = false; };
-    img.src = faceImg.getAttribute('src');
-  } else { faceCv.hidden = true; faceImg.hidden = false; }
-  function sizeFace() {
-    var dpr = Math.min(devicePixelRatio || 1, 2);
-    faceCv.width = Math.round(faceCv.clientWidth * dpr); faceCv.height = Math.round(faceCv.clientHeight * dpr);
-    eqCv.width = eqCv.clientWidth * dpr; eqCv.height = eqCv.clientHeight * dpr; eq.setTransform(dpr, 0, 0, dpr, 0, 0);
-    if (fgl) fgl.viewport(0, 0, faceCv.width, faceCv.height);
-  }
-  sizeFace(); addEventListener('resize', sizeFace);
-  var camVisible = true, ft0 = performance.now();
+  /* ---------- hero character: walks in place on a moving runway ---------- */
+  var cam = document.getElementById('cam'), buddy = document.getElementById('buddy'), eqCv = document.getElementById('eq'), eq = eqCv.getContext('2d');
+  var open = 0, openT = 0, talking = false, levels = new Array(14).fill(0);
+  var bigChar = document.getElementById('char-big'), bigLegs = bigChar.querySelector('.legs'), bigUpper = bigChar.querySelector('.upper');
+  function legScale(ph) { var c = Math.cos(ph); return c >= 0 ? .28 + .72 * c : -.28 + .72 * c; }
+  function sizeEq() { var dpr = Math.min(devicePixelRatio || 1, 2); eqCv.width = eqCv.clientWidth * dpr; eqCv.height = eqCv.clientHeight * dpr; eq.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  sizeEq(); addEventListener('resize', sizeEq);
+  var camVisible = true, heroPhase = 0, lastHero = performance.now();
   new IntersectionObserver(function (es) { camVisible = es[0].isIntersecting; }).observe(cam);
-  (function faceLoop(now) {
-    requestAnimationFrame(faceLoop);
+  (function heroLoop(now) {
+    requestAnimationFrame(heroLoop);
+    var dt = Math.min(50, now - lastHero); lastHero = now;
     if (!camVisible || document.hidden) return;
     open += (openT - open) * (openT > open ? .55 : .35);
-    talkAmt += ((talking ? 1 : 0) - talkAmt) * .05;
-    if (faceReady) {
-      fgl.uniform1f(fU.open, open); fgl.uniform1f(fU.talk, talkAmt);
-      fgl.uniform1f(fU.t, reduced ? 0 : (now - ft0) / 1000);
-      fgl.drawArrays(fgl.TRIANGLES, 0, 3);
+    if (!reduced) {
+      heroPhase += dt * .0062;
+      var b = Math.abs(Math.sin(heroPhase));
+      bigLegs.style.transform = 'scaleX(' + legScale(heroPhase).toFixed(3) + ')';
+      bigChar.style.transform = 'translateY(' + (-b * 7).toFixed(1) + 'px) rotate(' + (Math.sin(heroPhase) * 1.1).toFixed(2) + 'deg)';
+      bigUpper.style.transform = 'rotate(' + (talking ? Math.sin(now / 210) * 1.2 + open * 1.5 : 0).toFixed(2) + 'deg)';
     }
-    // little equaliser in the corner of the frame
     var w = eqCv.clientWidth, h = eqCv.clientHeight, n = levels.length, bw = w / n;
     eq.clearRect(0, 0, w, h);
     for (var i = 0; i < n; i++) {
-      var target = talking ? open * (.45 + .55 * Math.abs(Math.sin(i * 1.7 + now / 120))) : .08 + .05 * Math.sin(i + now / 500);
+      var target = talking ? open * (.45 + .55 * Math.abs(Math.sin(i * 1.7 + now / 120))) : .1 + .06 * Math.sin(i + now / 500);
       levels[i] += (target - levels[i]) * .35;
       var bh = Math.max(2, levels[i] * h);
       eq.fillStyle = i % 3 === 0 ? '#99f6e4' : i % 3 === 1 ? '#7dd3fc' : '#c4b5fd';
@@ -1057,7 +1061,7 @@ NULL != "ERROR"  <span class="bad">→ NULL → row dropped, never counted</span
   }
   function stop(finished) {
     audio.pause(); cancelAnimationFrame(raf); setTalking(false);
-    if (finished) bubble.textContent = "Thanks for listening! Scroll down to see my work."; else bubble.textContent = '';
+    if (finished) bubble.textContent = "Thanks for listening! Scroll down, I'll show you around."; else bubble.textContent = '';
   }
   function play() {
     try {
@@ -1079,23 +1083,107 @@ NULL != "ERROR"  <span class="bad">→ NULL → row dropped, never counted</span
   buddy.addEventListener('click', toggle); playBtn.addEventListener('click', toggle);
   stopBtn.addEventListener('click', function () { stop(false); });
 
-  /* ---------- mini guide that follows you down the page ---------- */
-  var guide = document.getElementById('guide'), say = document.getElementById('guide-say');
-  guide.addEventListener('click', function () { if (!talking) cam.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }); toggle(); });
-  new IntersectionObserver(function (es) { guide.classList.toggle('show', !es[0].isIntersecting); }, { threshold: .12 }).observe(hero);
-  var lines = ["This is the pipeline I rebuilt, then broke 8 times on purpose.", "3 years of production data work, plus what I build on the side.",
-    "The tools I reach for every day.", "Always learning. AWS Solutions Architect is next.", "If you're hiring, I'd love to chat 👋"];
-  var sayTimer = 0, lastSaid = -1, panels = document.querySelectorAll('.wrap > section');
-  var so = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      var i = Array.prototype.indexOf.call(panels, e.target);
-      if (i === lastSaid || !lines[i]) return; lastSaid = i;
-      say.textContent = lines[i]; guide.classList.add('say');
-      clearTimeout(sayTimer); sayTimer = setTimeout(function () { guide.classList.remove('say'); }, 4200);
-    });
-  }, { threshold: .35 });
-  panels.forEach(function (p) { so.observe(p); });
+  /* ---------- mini me: walks along the bottom of the screen and points things out ---------- */
+  var walker = document.getElementById('walker'), wBody = document.getElementById('w-body'), wBubble = document.getElementById('w-bubble');
+  var wChar = walker.querySelector('.char'), wLegs = walker.querySelector('.legs'), walkway = document.getElementById('walkway');
+  var beam = document.getElementById('beam'), bLine = document.getElementById('beam-line'), bDot = document.getElementById('beam-dot');
+  var TARGETS = [
+    ['.flow', "This pipeline? I broke it 8 times on purpose."],
+    ['.incident', "A bug that never crashed. The scariest kind."],
+    ['.decisions', "Idempotent loads: re-run anything, safely."],
+    ['#work ul:first-of-type li:first-child .figs', "20 hours down to under 2. Proud of that one."],
+    ['#work ul:first-of-type li:nth-child(2)', "I built an OCR tool so nobody types receipts again."],
+    ['#work ul:last-of-type li:nth-child(1)', "13 microservices on EKS, shipped with GitOps."],
+    ['#work ul:last-of-type li:nth-child(3)', "Quality gates: 40% less tech debt."],
+    ['#work ul:last-of-type li:nth-child(4)', "My MSc: an LSTM that sees a fight coming."],
+    ['#work ul:last-of-type li:nth-child(5)', "AI with 4 fallbacks. It never goes dark."],
+    ['.wrap > section:nth-of-type(3) .tools', "My everyday toolkit: data, cloud, DevOps, AI."],
+    ['.wrap > section:nth-of-type(4) .tools', "Google Cloud certified. AWS is next."],
+    ['.contact .links', "Go on, say hi 👋"]
+  ].map(function (t) { return { el: document.querySelector(t[0]), text: t[1] }; }).filter(function (t) { return t.el; });
+  var Wk = { x: -90, dir: 1, phase: 0, state: 'idle', target: null, goal: 0, wait: 900, recent: [], lean: 0 };
+  var heroShown = true, lastW = performance.now(), sayTimer2 = 0, pointedEl = null;
+  new IntersectionObserver(function (es) { heroShown = es[0].intersectionRatio > .3; }, { threshold: [0, .3, .6, 1] }).observe(hero);
+  function ww() { return walker.offsetWidth; }
+  function clampX(x) { return Math.max(6, Math.min(innerWidth - ww() - 6, x)); }
+  function inView(el) { var r = el.getBoundingClientRect(); return r.height > 0 && r.bottom > innerHeight * .1 && r.top < innerHeight * .7; }
+  function speak2(text, ms) {
+    wBubble.textContent = text; walker.classList.add('say');
+    clearTimeout(sayTimer2); if (ms) sayTimer2 = setTimeout(function () { walker.classList.remove('say'); }, ms);
+  }
+  function placeBubble() {
+    var bw = wBubble.offsetWidth, left = Wk.x + ww() / 2 - bw / 2;
+    left = Math.max(8, Math.min(innerWidth - bw - 8, left));
+    wBubble.style.left = (left - Wk.x) + 'px';
+  }
+  function beamOff() { beam.classList.remove('on'); if (pointedEl) { pointedEl.classList.remove('pointed'); pointedEl = null; } }
+  function pickTarget() {
+    var c = TARGETS.filter(function (t) { return inView(t.el) && Wk.recent.indexOf(t.el) < 0; });
+    if (!c.length) { Wk.recent = Wk.recent.slice(-1); return null; }
+    return c[0];
+  }
+  wBody.addEventListener('click', function () { if (talking) stop(false); else play(); });
+
+  (function walkLoop(now) {
+    requestAnimationFrame(walkLoop);
+    var dt = Math.min(120, now - lastW); lastW = now;
+    if (document.hidden) return;
+    var show = !heroShown;
+    walker.classList.toggle('show', show); walkway.classList.toggle('on', show);
+    if (!show) { beamOff(); walker.classList.remove('say'); Wk.state = 'idle'; Wk.wait = 400; return; }
+    var speed = innerWidth < 600 ? .09 : .13; // px per ms
+    if (talking) { // stop and talk, captions follow the voice
+      beamOff(); Wk.state = 'idle'; Wk.wait = 1200;
+      var txt = bubble.textContent; if (wBubble.textContent !== txt) wBubble.textContent = txt;
+      walker.classList.toggle('say', !!txt);
+    } else if (Wk.state === 'idle') {
+      Wk.wait -= dt;
+      if (Wk.wait <= 0) {
+        var t = pickTarget();
+        if (t) {
+          var r = t.el.getBoundingClientRect(), cx = r.left + r.width / 2;
+          var off = Math.min(110, r.width / 2 + 10);
+          Wk.goal = clampX(cx + (cx > innerWidth / 2 ? -off - ww() : off));
+          Wk.target = t;
+        } else { Wk.goal = clampX(Math.random() * innerWidth); Wk.target = null; }
+        Wk.state = 'walk';
+      }
+    } else if (Wk.state === 'walk') {
+      if (Wk.target && !inView(Wk.target.el)) { Wk.target = null; Wk.state = 'idle'; Wk.wait = 250; }
+      var d = Wk.goal - Wk.x;
+      if (Math.abs(d) < 1.5 || reduced) {
+        Wk.x = Wk.goal;
+        if (Wk.target) {
+          Wk.state = 'point'; Wk.wait = 3800; Wk.recent.push(Wk.target.el); if (Wk.recent.length > 6) Wk.recent.shift();
+          speak2(Wk.target.text, 3800);
+        } else { Wk.state = 'idle'; Wk.wait = 1400 + Math.random() * 2600; }
+      } else {
+        Wk.dir = d > 0 ? 1 : -1;
+        var step = Math.min(Math.abs(d), speed * dt); Wk.x += Wk.dir * step; Wk.phase += step * .06;
+      }
+    } else if (Wk.state === 'point') {
+      var tr = Wk.target.el.getBoundingClientRect();
+      Wk.dir = tr.left + tr.width / 2 > Wk.x + ww() / 2 ? 1 : -1;
+      var cr = wChar.getBoundingClientRect();
+      var hx = Wk.dir > 0 ? cr.left + cr.width * .9474 : cr.left + cr.width * (1 - .9474), hy = cr.top + cr.height * .5532;
+      var tx = Math.max(tr.left + 14, Math.min(tr.right - 14, hx)), ty = Math.max(tr.top + 14, Math.min(tr.bottom - 14, hy));
+      if (Math.hypot(tx - hx, ty - hy) < 60) { tx = tr.left + tr.width * (Wk.dir > 0 ? .7 : .3); ty = Math.max(14, tr.top + Math.min(40, tr.height / 4)); }
+      bLine.setAttribute('x1', hx.toFixed(1)); bLine.setAttribute('y1', hy.toFixed(1)); bLine.setAttribute('x2', tx.toFixed(1)); bLine.setAttribute('y2', ty.toFixed(1));
+      bDot.setAttribute('cx', tx.toFixed(1)); bDot.setAttribute('cy', ty.toFixed(1));
+      beam.classList.add('on');
+      if (pointedEl !== Wk.target.el) { if (pointedEl) pointedEl.classList.remove('pointed'); pointedEl = Wk.target.el; pointedEl.classList.add('pointed'); }
+      Wk.wait -= dt;
+      if (Wk.wait <= 0 || !inView(Wk.target.el)) { beamOff(); walker.classList.remove('say'); Wk.target = null; Wk.state = 'idle'; Wk.wait = 700 + Math.random() * 900; }
+    }
+    // draw
+    var walking = Wk.state === 'walk' && !reduced;
+    var bob = walking ? Math.abs(Math.sin(Wk.phase)) * 3.5 : (talking ? open * 3 : Math.sin(now / 600) * .8 + .8);
+    Wk.lean += ((Wk.state === 'point' ? 4 * Wk.dir : 0) - Wk.lean) * .1;
+    walker.style.transform = 'translate3d(' + Wk.x.toFixed(1) + 'px,' + (-bob).toFixed(1) + 'px,0)';
+    wChar.style.transform = 'scaleX(' + Wk.dir + ') rotate(' + (Wk.lean * Wk.dir).toFixed(2) + 'deg)';
+    wLegs.style.transform = 'scaleX(' + (walking ? legScale(Wk.phase) : .62).toFixed(3) + ')';
+    if (walker.classList.contains('say')) placeBubble();
+  })(performance.now());
 
   /* ---------- scroll progress (also drives the background) ---------- */
   var progEl = document.getElementById('progress');
